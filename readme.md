@@ -24,6 +24,9 @@ Plastic은 흔히 알려진 몇가지 주요 개념들을 중점으로 디자인
 * 강한 결합 (Coupling)
 * 명시적 종속성 (Explicit dependencies)
 
+아래는 명령의 흐름을 설명합니다.
+![Platstic의 명령 흐름](resources/plastic-flow.png)
+
 ## 명령 패턴 (Command Pattern)
 Command Pattern은 개체 자체가 명령이라는 단순한 디자인 패턴입니다.
 Application에서 다루는 Usecase는 Application이 제공하는 행동을 다루기에 이 Command Pattern으로 다루기에 적절합니다.

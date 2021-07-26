@@ -29,7 +29,7 @@ Plastic은 흔히 알려진 몇가지 주요 개념들을 중점으로 디자인
 
 ## 명령 패턴 (Command Pattern)
 Command Pattern은 개체 자체가 명령이라는 단순한 디자인 패턴입니다.
-Application에서 다루는 Usecase는 Application이 제공하는 행동을 다루기에 이 Command Pattern으로 다루기에 적절합니다.
+Application에서 다루는 Usecase는 Application이 제공하는 행동을 다루기에 Command Pattern은 매우 적절합니다.
 
 Plastic에서 이 Command들은 Consumer가 직접적으로 다룰 수 있게 제일 앞단에 배치됩니다.
 구현에서는 아래와 같은 소스코드가 이를 담당합니다.

@@ -35,27 +35,37 @@ Plastic에서 이 Command들은 Consumer가 직접적으로 다룰 수 있게 �
 구현에서는 아래와 같은 소스코드가 이를 담당합니다.
 
 ```cs
-interface ICommandExecutable<TParam, TResponse>
+public interface ICommandSpecification<in TParam, TResponse>
+        where TParam : CommandParameters
+        where TResponse : Response
 {
-   Task<TResponse> ExecuteAsync(TParam param, CancellationToken token = default);
    Task<Response> CanExecuteAsync(TParam param, CancellationToken token = default);
+   Task<TResponse> ExecuteAsync(TParam param, CancellationToken token = default);
 }
 ```
+
+Plastic은 명세된 `ICommandSpecification<,>` 의 구현체를 바탕으로 사용가능한 Command를 생성합니다.
+> 생성된 Command에는 Pipeline을 연결하는 코드들이 포함됩니다.
+
 
 ## 비상태 저장 (Stateless)
 Usecase 를 표현하는 모든 Command들은 Stateful 을 지원하지 않습니다.
 Usecase가 상태를 저장하는건 Business Transaction을 보장하는것에 유용하지 못합니다.
-이 말은 흔히 Web에서 볼 수 있는 Seesion과 같은 도구가 지원하지 않는다는 것을 의미합니다.
+
+즉 흔히 Web에서 볼 수 있는 Seesion과 같은 도구를 지원하지 않으며 장려하지 하지 않습니다.
 
 ## 파이프라인 (Pipeline)
 모든 Command들은 특정한 전역 파이프라인 (Global Pipeline)을 거친 후 실행됩니다.
 이 파이프라인을 구성함으로써 보다 나은 기능성을 기대할 수 있습니다.
 
-Logging, Business transaction, Integration event와 시나리오들을 이 파이프라인에서 프로세싱할 수 있습니다.
+Logging, Business transaction, Integration event와 같은 시나리오들을 이 파이프라인에서 프로세싱할 수 있습니다.
 
 ## 장기 실행 서비스 (Long-running Service)
 몇몇 Application들은 특정 Domain 개체의 상태를 변경하는것으로 끝나지 않을 수 있습니다.
-이러한 시나리오는 대개 Machine learning을 활용하는 Application에서 볼 수 있습니다.
+
+특히 Mobile이나 Desktop Application들이 그렇습니다.
+
+또한 Machine learning을 활용하는 Application에서도 볼 수 있습니다.
 Machine learning의 학습 과정은 Long-running 입니다.
 
 ## 안전성 (Safety)
@@ -84,46 +94,11 @@ Plastic은 바깥 Layer가 이 Usecase의 변경사항에 민감하게 반응하
 다양하게 수많은 Command들을 손쉽게 다루기 위한 방법으로 Mediator 혹은 Service Locator와 같은 방법을 생각해낼 수 있습니다.
 그러나 이는 개체의 명시적 종속을 위반합니다.
 
-등가 교환으로 이 명시적 종속성을 품에 안을 수 있습니다.
+등가 교환으로 이 명시적 종속성 위반을 품에 안을 수 있습니다.
 하지만 Plastic은 이 명시적 종속성을 지키고 싶습니다.
 
 이를 위해 .Net 5에서 소개된 Source Generator 를 활용합니다.
 이를 통해 사용성과 명시적 종속성, 이 두가지를 모두 제공합니다.
-
-## Usage
-
-```cs
-
-internal class LoggingPipe : IPipe
-{
-   
-}
-
-internal class PipelineSpecification
-{
-    public IEnumerable<IPipe> BuildPipeline()
-    {
-        yield return new LoggingPipe();
-    }
-}
-
-public class LoginCommand : ICommandExecutable<LoginParam, Response>
-{
-    ...
-}
-
-// -- 
-
-public LoginController : ControllerBase
-{
-   // IoC Container를 통해 주입
-   public LoginController(LoginCommand command)
-   {
-      ...
-   }
-}
-
-```
 
 # 이름에 대하여...
 일상 생활에서 Plastic은 대부분 무언가를 보호하기 위해 사용되는 깨지기 쉬운 재질입니다.

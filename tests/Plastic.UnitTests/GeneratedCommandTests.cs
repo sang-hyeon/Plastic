@@ -1,9 +1,9 @@
 ﻿namespace Plastic.UnitTests
 {
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using FluentAssertions;
+    using Microsoft.Extensions.DependencyInjection;
     using Plastic;
     using Plastic.Commands;
     using Xunit;
@@ -11,10 +11,15 @@
     public class GeneratedCommandTests
     {
         [Fact]
-        public void Generated_command_does_execute_command()
+        public void Generated_command_does_execute_command_correctly()
         {
             // Arrange
-            var sut = new TestCommand(FakeGetService);
+            var serviceCollection = new ServiceCollection();
+            PlasticInitializer.AddGeneratedCommands((type) => serviceCollection.AddTransient(type));
+            ServiceProvider provider = serviceCollection.BuildServiceProvider();
+            GetService getService = (service) => provider.GetService(service);
+
+            var sut = new TestCommand(getService);
 
             // Act
             Response response = sut.ExecuteAsync(new NoParameters()).Result;
@@ -22,15 +27,6 @@
             // Assert
             response.HasSucceed().Should().BeTrue();
         }
-
-        public static object? FakeGetService(Type type)
-        {
-            if (type == typeof(TestCommandSpec))
-                return new TestCommandSpec();
-            else
-                return default;
-        }
-
 
         public class TestCommandSpec : CommandSpecificationBase
         {

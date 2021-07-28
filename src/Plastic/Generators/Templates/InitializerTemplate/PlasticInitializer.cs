@@ -1,4 +1,4 @@
-﻿namespace Plastic
+﻿namespace Plastic.Generator
 {
     using Plastic.Commands;
 

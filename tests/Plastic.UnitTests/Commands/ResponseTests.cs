@@ -14,7 +14,7 @@
         [InlineData(true, "Seotaiji")]
         [InlineData(false, "Damien rice")]
         [AutoData]
-        public void Constructore_does_construct_with_the_given_parameters(
+        public void Constructor_does_construct_with_given_parameters(
             bool expectedSuccess, string? expectedMessage)
         {
             // Arrange
@@ -34,7 +34,7 @@
         [InlineData(true, "Seotaiji")]
         [InlineData(false, "Damien rice")]
         [AutoData]
-        public void Constructore_does_construct_with_the_given_ResponseState(
+        public void Constructor_does_construct_with_given_ResponseState(
             bool expectedSuccess, string? expectedMessage)
         {
             // Arrange
@@ -50,7 +50,7 @@
         [Theory]
         [InlineData(true)]
         [InlineData(false)]
-        public void HasSucceed_does_return_success(bool expectedSuccess)
+        public void HasSucceed_does_return_correctly(bool expectedSuccess)
         {
             // Arrange
             var sut = new Response(expectedSuccess, string.Empty);

@@ -13,75 +13,95 @@
     [Generator]
     internal class PlasticGenerator : ISourceGenerator
     {
-        public const string ICOMMAND_SPEC_NAME = "Plastic.ICommandSpecification`2";
+        private const string COMMAND_TEMPLATE =
+            "Plastic.Generators.Templates.CommandTemplate.CommandTemplate.txt";
+
+        private const string INITIALIZER_TEMPLATE =
+            "Plastic.Generators.Templates.InitializerTemplate.PlasticInitializerTemplate.txt";
+
+        private static readonly string ICOMMAND_SPEC_FULL_NAME
+            = typeof(ICommandSpecification<,>).FullName;
 
         public void Execute(GeneratorExecutionContext context)
         {
             var receiver = (SyntaxReceiver)context.SyntaxContextReceiver!;
-
             if (receiver.Targets.Count <= 0)
                 return;
 
-            string commandTemplate = GetCommandTemplate();
-            var commandBuilder = new StringBuilder(commandTemplate);
-            var objectNameToAddAsService = new HashSet<string>();
+            string commandTemplate = ReadEmbeddedResourceAsString(COMMAND_TEMPLATE);
+            var generatedCommands = new HashSet<GeneratedCommandInfo>();
             
-            foreach (TypeDeclarationSyntax commandSpec in receiver.Targets)
+            foreach (TypeDeclarationSyntax userCommandSpec in receiver.Targets)
             {
-                SemanticModel model = context.Compilation.GetSemanticModel(commandSpec.SyntaxTree);
+                GeneratedCommandInfo? generatedCommandInfo =
+                                GenerateCommands(context, userCommandSpec, commandTemplate);
 
-                INamedTypeSymbol icommandSpecSymbol =
-                                            model.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_NAME)!;
+                if (generatedCommandInfo != null)
+                    generatedCommands.Add(generatedCommandInfo);
+            }
 
-                var commandSpecSymbol = (INamedTypeSymbol)model.GetDeclaredSymbol(commandSpec) !;
-                string commandName = commandSpecSymbol.Name.Replace("CommandSpec", string.Empty) + "Command";
+            GeneratePlasticInitializer(context, generatedCommands);
+        }
 
-                INamedTypeSymbol commandSpecInterface = commandSpecSymbol.AllInterfaces
-                                                                            .First(q => q.ConstructedFrom == icommandSpecSymbol);
+        private static GeneratedCommandInfo? GenerateCommands(
+            GeneratorExecutionContext contextToAdd, TypeDeclarationSyntax userCommandSpec, string commandTemplate)
+        {
+            SemanticModel model = contextToAdd.Compilation.GetSemanticModel(userCommandSpec.SyntaxTree);
+            INamedTypeSymbol originalInterface =
+                                        model.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_FULL_NAME)!;
+
+            if (model.GetDeclaredSymbol(userCommandSpec) is INamedTypeSymbol userCommandSpecSymbol)
+            {
+                string commandNameGenerated = GenerateCommandName(userCommandSpecSymbol);
+
+                INamedTypeSymbol commandSpecInterface =
+                    userCommandSpecSymbol.AllInterfaces.First(q => q.ConstructedFrom == originalInterface);
 
                 ITypeSymbol paramSymbol = commandSpecInterface.TypeArguments[0];
                 ITypeSymbol responseSymbol = commandSpecInterface.TypeArguments[1];
 
-                commandBuilder.Replace("Plastic.TTFFCommandSpec", commandSpecSymbol.ToString());
-                commandBuilder.Replace("TTFFCommand", commandName);
+                var commandBuilder = new StringBuilder(commandTemplate);
+                commandBuilder.Replace("Plastic.TTFFCommandSpec", userCommandSpecSymbol.ToString());
+                commandBuilder.Replace("TTFFCommand", commandNameGenerated);
                 commandBuilder.Replace("Plastic.TTFFParameter", paramSymbol.ToString());
                 commandBuilder.Replace("Plastic.TTFFResponse", responseSymbol.ToString());
 
-                context.AddSource($"{commandName}.cs", commandBuilder.ToString());
-                objectNameToAddAsService.Add(commandName);
-                objectNameToAddAsService.Add(commandSpecSymbol.ToString());
+                contextToAdd.AddSource($"{commandNameGenerated}.cs", commandBuilder.ToString());
+
+                return new GeneratedCommandInfo(commandNameGenerated, userCommandSpecSymbol.ToString());
             }
-
-            string generatedInitializer = GeneratePlasticInitializer(objectNameToAddAsService);
-            context.AddSource("PlasticInitializer.cs", generatedInitializer);
+            else
+                return default;
         }
 
-        private static string GetCommandTemplate()
+        private static string GenerateCommandName(INamedTypeSymbol userCommandSpecSymbol)
         {
-            using Stream templateStream =
-                Assembly.GetExecutingAssembly()
-                             .GetManifestResourceStream("Plastic.Generators.Templates.CommandTemplate.CommandTemplate.txt");
-
-            using var reader = new StreamReader(templateStream, Encoding.UTF8);
-            return reader.ReadToEnd();
+            return userCommandSpecSymbol.Name.Replace("CommandSpec", string.Empty) + "Command";
         }
 
-        private static string GeneratePlasticInitializer(ICollection<string> objectNameToAdd)
+        private static void GeneratePlasticInitializer(
+            GeneratorExecutionContext contextToAdd, ICollection<GeneratedCommandInfo> generatedCommands)
         {
-            using Stream templateStream =
-                Assembly.GetExecutingAssembly()
-                             .GetManifestResourceStream("Plastic.Generators.Templates.InitializerTemplate.PlasticInitializerTemplate.txt");
+            string template = ReadEmbeddedResourceAsString(INITIALIZER_TEMPLATE);
 
-            using var reader = new StreamReader(templateStream, Encoding.UTF8);
-            string template = reader.ReadToEnd();
-
-            var builder = new StringBuilder(objectNameToAdd.Count);
-            foreach (string commandName in objectNameToAdd)
+            var builder = new StringBuilder();
+            foreach (GeneratedCommandInfo commandName in generatedCommands)
             {
-                builder.AppendLine($"\t\t\tadding.Invoke(typeof({commandName}));");
+                builder.AppendLine($"\t\t\tadding.Invoke(typeof({commandName.CommandSpecFullName}));");
+                builder.AppendLine($"\t\t\tadding.Invoke(typeof({commandName.GeneratedCommandName}));");
             }
 
-            return template.Replace("{{AddServices}}", builder.ToString());
+            string generatedCode = template.Replace("{{AddServices}}", builder.ToString());
+            contextToAdd.AddSource("PlasticInitializer.cs", generatedCode);
+        }
+
+        private static string ReadEmbeddedResourceAsString(string resourceName)
+        {
+            using Stream resourceStream = Assembly.GetExecutingAssembly()
+                                                                .GetManifestResourceStream(resourceName);
+
+            using var reader = new StreamReader(resourceStream, Encoding.UTF8);
+            return reader.ReadToEnd();
         }
 
         public void Initialize(GeneratorInitializationContext context)
@@ -101,7 +121,7 @@
                     if (symbole is INamedTypeSymbol namedSymbol)
                     {
                         INamedTypeSymbol commandSpecSymbol =
-                            context.SemanticModel.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_NAME)!;
+                            context.SemanticModel.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_FULL_NAME)!;
                         
                         if (namedSymbol.AllInterfaces.Any(q => q.ConstructedFrom == commandSpecSymbol))
                         {

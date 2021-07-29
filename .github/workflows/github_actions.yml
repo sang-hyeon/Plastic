@@ -23,7 +23,7 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       
-    - name: Publish
-      env:
-        NugetKey: ${{ secrets.NugetApiKey }}
-      run: dotnet nuget push *.nupkg --api-key "%NugetKey%" --source https://api.nuget.org/v3/index.json
+    - name: Publish NuGet
+      uses: dansiegel/publish-nuget@v1.01
+      with:
+        apiKey: ${{ secrets.NugetApiKey }}

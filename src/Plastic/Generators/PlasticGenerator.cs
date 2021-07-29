@@ -76,7 +76,17 @@
 
         private static string GenerateCommandName(INamedTypeSymbol userCommandSpecSymbol)
         {
-            return userCommandSpecSymbol.Name.Replace("CommandSpec", string.Empty) + "Command";
+            string attributeName = typeof(CommandNameAttribute).FullName;
+            AttributeData? commandNameAtt = userCommandSpecSymbol
+                                                                    .GetAttributes()
+                                                                    .FirstOrDefault(att => att.AttributeClass?.ToString() == attributeName);
+
+            if (commandNameAtt?.ConstructorArguments.FirstOrDefault().Value is string commandName)
+            {
+                return commandName;
+            }
+            else
+                return userCommandSpecSymbol.Name.Replace("CommandSpec", string.Empty) + "Command";
         }
 
         private static void GeneratePlasticInitializer(

@@ -22,3 +22,8 @@ jobs:
       
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      
+    - name: Publish
+      param:
+        NugetKey: ${{ secrets.NugetApiKey }}
+      run: dotnet nuget push *.nupkg --api-key "%NugetKey%" --source https://api.nuget.org/v3/index.json

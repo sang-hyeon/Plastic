@@ -32,6 +32,8 @@
         {
             BuildPipeline? pipelineBuilder = GetService<BuildPipeline>();
             IEnumerable<IPipe> pipeline = pipelineBuilder?.Invoke() ?? Array.Empty<IPipe>();
+            pipeline = pipeline.Reverse();
+
             var context = new PipelineContext(param, typeof(TargetCommandSpec));
 
             Behavior<Response> command = CreateCommandAsBehavior(param, token);

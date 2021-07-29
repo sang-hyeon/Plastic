@@ -19,7 +19,8 @@
     <PackageProjectUrl>https://github.com/sang-hyeon/Plastic</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sang-hyeon/Plastic</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags />    
+    <PackageTags>Domain Service;Clean Architecture;Usecase;Command;Command pattern</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>    
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <WarningsAsErrors>;NU1605</WarningsAsErrors>

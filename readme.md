@@ -1,7 +1,7 @@
 ﻿> 이 프로젝트는 아직 초기 개발 단계입니다. 하기 내용에서 다루어진 주요 컨셉은 대부분 구현되지 않았습니다.
 <br>
 
-![Nuget](https://img.shields.io/nuget/v/Plastic)
+[![Nuget](https://img.shields.io/nuget/v/Plastic)](https://www.nuget.org/packages/Plastic/)
 
 # 개요
 이 프로젝트는 Application에서 Usecase Layer를 위한 기초 프레임을 제공합니다.

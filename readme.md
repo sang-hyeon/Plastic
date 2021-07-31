@@ -1,6 +1,7 @@
 ﻿> 이 프로젝트는 아직 초기 개발 단계입니다. 하기 내용에서 다루어진 주요 컨셉은 대부분 구현되지 않았습니다.
 <br>
 
+[![Build Main](https://github.com/sang-hyeon/Plastic/actions/workflows/github_actions.yml/badge.svg?branch=main)](https://github.com/sang-hyeon/Plastic/actions/workflows/github_actions.yml)
 [![Nuget](https://img.shields.io/nuget/v/Plastic)](https://www.nuget.org/packages/Plastic/)
 
 # 개요

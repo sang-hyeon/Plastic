@@ -22,8 +22,6 @@ jobs:
       
     - name: Test
       run: dotnet test --no-build --verbosity normal
-      
-    - name: Publish NuGet
-      uses: dansiegel/publish-nuget@v1.01
-      with:
-        apiKey: ${{ secrets.NugetApiKey }}
+        
+    - name: Publish Package to Nuget.org
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NugetApiKey }} --source "nuget.org" --skip-duplicate --no-symbols true

@@ -9,10 +9,10 @@
     using Plastic.Commands;
     using Xunit;
 
-    public class GeneratedCommandTests
+    public class GeneratedCommand
     {
         [Fact]
-        public void Generated_command_does_execute_command_correctly()
+        public void ExecuteAsync_does_execute_command_correctly()
         {
             // Arrange
             var serviceCollection = new ServiceCollection();
@@ -29,7 +29,7 @@
         }
 
         [Fact]
-        public void Generated_command_does_execute_command_through_pipeline()
+        public void ExecuteAsync_does_execute_command_through_pipeline()
         {
             // Arrange
             var serviceCollection = new ServiceCollection();
@@ -57,7 +57,7 @@
         }
 
         [Fact]
-        public void Generated_command_does_use_service_as_a_single_instance()
+        public void ExecuteAsync_does_use_service_as_a_single_instance()
         {
             // Arrange
             var serviceCollection = new ServiceCollection();

@@ -127,16 +127,21 @@
             {
                 if (context.Node is TypeDeclarationSyntax typeNode)
                 {
-                    ISymbol? symbole = context.SemanticModel.GetDeclaredSymbol(typeNode);
-                    if (symbole is INamedTypeSymbol namedSymbol)
+                    OnVisitTypeDeclarationSyntax(context, typeNode);
+                }
+            }
+
+            private void OnVisitTypeDeclarationSyntax(GeneratorSyntaxContext context, TypeDeclarationSyntax typeSyntax)
+            {
+                ISymbol? symbole = context.SemanticModel.GetDeclaredSymbol(typeSyntax);
+                if (symbole is INamedTypeSymbol namedSymbol && namedSymbol.IsAbstract == false)
+                {
+                    INamedTypeSymbol commandSpecSymbol =
+                        context.SemanticModel.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_FULL_NAME)!;
+
+                    if (namedSymbol.AllInterfaces.Any(q => q.ConstructedFrom == commandSpecSymbol))
                     {
-                        INamedTypeSymbol commandSpecSymbol =
-                            context.SemanticModel.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_FULL_NAME)!;
-                        
-                        if (namedSymbol.AllInterfaces.Any(q => q.ConstructedFrom == commandSpecSymbol))
-                        {
-                            this.Targets.Add(typeNode);
-                        }
+                        this.Targets.Add(typeSyntax);
                     }
                 }
             }

@@ -10,7 +10,7 @@
 
   <!--  -->
   <PropertyGroup>
-    <Version>0.1.2</Version>
+    <Version>0.1.3</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>SangHyeon.Kim</Authors>
@@ -44,13 +44,14 @@
   <!-- Templates to generate -->
   <ItemGroup>
     <None Remove="Generators\Templates\CommandTemplate.txt" />
-    <None Remove="Generators\Templates\InitializerTemplate\PlasticInitializerTemplate.txt" />
+    <None Remove="Generators\Templates\InitializerTemplate\ServiceCollectionExtensionsTemplate.txt" />
     
-    <EmbeddedResource Include="Generators\Templates\CommandTemplate\CommandTemplate.txt" />
-    <EmbeddedResource Include="Generators\Templates\InitializerTemplate\PlasticInitializerTemplate.txt" />
+    <EmbeddedResource Include="Generators\Templates\CommandTemplate\CommandTemplate.txt" />    
+    <EmbeddedResource Include="Generators\Templates\InitializerTemplate\ServiceCollectionExtensionsTemplate.txt" />
   </ItemGroup>
 
 	<ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
 		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

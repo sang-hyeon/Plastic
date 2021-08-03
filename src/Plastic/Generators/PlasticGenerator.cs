@@ -60,11 +60,14 @@
                 ITypeSymbol paramSymbol = commandSpecInterface.TypeArguments[0];
                 ITypeSymbol responseSymbol = commandSpecInterface.TypeArguments[1];
 
+                string codeForServicesToBeProvided = BuildServiceInjectionCodeForPipelineContext(userCommandSpecSymbol);
+
                 var commandBuilder = new StringBuilder(commandTemplate);
                 commandBuilder.Replace("Plastic.TTFFCommandSpec", userCommandSpecSymbol.ToString());
                 commandBuilder.Replace("TTFFCommand", commandNameGenerated);
                 commandBuilder.Replace("Plastic.TTFFParameter", paramSymbol.ToString());
                 commandBuilder.Replace("Plastic.TTFFResponse", responseSymbol.ToString());
+                commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
 
                 contextToAdd.AddSource($"{commandNameGenerated}.cs", commandBuilder.ToString());
 
@@ -103,6 +106,27 @@
 
             string generatedCode = template.Replace("{{AddServices}}", builder.ToString());
             contextToAdd.AddSource("PlasticInitializer.cs", generatedCode);
+        }
+
+        private static string BuildServiceInjectionCodeForPipelineContext(INamedTypeSymbol userCommandSpecSymbol)
+        {
+            IParameterSymbol[] parameters =
+                userCommandSpecSymbol.Constructors.SelectMany(q => q.Parameters).Distinct().ToArray();
+
+            if (0 < parameters.Length)
+            {
+                var builder = new StringBuilder();
+                foreach (IParameterSymbol item in parameters)
+                {
+                    builder.Append($"\t\t\t\tprovider.GetService<{item}>(),\n");
+                    builder.Replace("?", string.Empty); // to not null
+                }
+
+                builder.Remove(builder.Length - 2, 2);
+                return builder.ToString();
+            }
+            else
+                return string.Empty;
         }
 
         private static string ReadEmbeddedResourceAsString(string resourceName)

@@ -3,7 +3,8 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
-	  <Nullable>enable</Nullable>    
+	  <Nullable>enable</Nullable>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <IsRoslynComponent>true</IsRoslynComponent>
     <IncludeBuildOutput>true</IncludeBuildOutput>
   </PropertyGroup>

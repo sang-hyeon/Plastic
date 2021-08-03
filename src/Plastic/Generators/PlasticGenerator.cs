@@ -17,7 +17,7 @@
             "Plastic.Generators.Templates.CommandTemplate.CommandTemplate.txt";
 
         private const string INITIALIZER_TEMPLATE =
-            "Plastic.Generators.Templates.InitializerTemplate.PlasticInitializerTemplate.txt";
+            "Plastic.Generators.Templates.InitializerTemplate.ServiceCollectionExtensionsTemplate.txt";
 
         private static readonly string ICOMMAND_SPEC_FULL_NAME
             = typeof(ICommandSpecification<,>).FullName;
@@ -97,8 +97,8 @@
             var builder = new StringBuilder();
             foreach (GeneratedCommandInfo commandName in generatedCommands)
             {
-                builder.AppendLine($"\t\t\tadding.Invoke(typeof({commandName.CommandSpecFullName}));");
-                builder.AppendLine($"\t\t\tadding.Invoke(typeof({commandName.GeneratedCommandName}));");
+                builder.AppendLine($"\t\t\tservices.AddTransient(typeof({commandName.CommandSpecFullName}));");
+                builder.AppendLine($"\t\t\tservices.AddTransient(typeof({commandName.GeneratedCommandName}));");
             }
 
             string generatedCode = template.Replace("{{AddServices}}", builder.ToString());

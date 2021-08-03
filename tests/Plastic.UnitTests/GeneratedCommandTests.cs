@@ -16,11 +16,10 @@
         {
             // Arrange
             var serviceCollection = new ServiceCollection();
-            PlasticInitializer.AddGeneratedCommands((type) => serviceCollection.AddTransient(type));
+            serviceCollection.UsePlastic();
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
-            GetService getService = (service) => provider.GetService(service);
 
-            var sut = new FakeCommand(getService);
+            var sut = new FakeCommand(provider);
 
             // Act
             Response response = sut.ExecuteAsync(new NoParameters()).Result;
@@ -34,22 +33,20 @@
         {
             // Arrange
             var serviceCollection = new ServiceCollection();
-            PlasticInitializer.AddGeneratedCommands((type) => serviceCollection.AddTransient(type));
 
             var logger = new ConcurrentQueue<int>();
             serviceCollection.AddTransient(_ => logger);
 
-            var pipeline = new BuildPipeline(() => new IPipe[]
+            var pipeline = new BuildPipeline(_ => new IPipe[]
             {
                 new FakePipe(logger, 1, 2),
                 new FakePipe(logger, 3, 4),
                 new FakePipe(logger, 5, 6)
             });
-            serviceCollection.AddTransient(_ => pipeline);
-
+            serviceCollection.UsePlastic(pipeline);
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
-            GetService getService = (service) => provider.GetService(service);
-            var sut = new FakeCommand(getService);
+
+            var sut = new FakeCommand(provider);
 
             // Act
             Response response = sut.ExecuteAsync(new NoParameters()).Result;
@@ -59,13 +56,39 @@
             logger.Should().BeEquivalentTo(expectedLog);
         }
 
+        [Fact]
+        public void Generated_command_does_use_service_as_a_single_instance()
+        {
+            // Arrange
+            var serviceCollection = new ServiceCollection();
+
+            var logger = new ConcurrentQueue<int>();
+            serviceCollection.AddScoped(_ => logger);
+
+            var pipeline = new BuildPipeline(p => new IPipe[]
+            {
+                new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>()),
+                new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>())
+            });
+            serviceCollection.UsePlastic(pipeline);
+            ServiceProvider provider = serviceCollection.BuildServiceProvider();
+
+            var sut = new FakeCommand(provider);
+
+            // Act
+            Response response = sut.ExecuteAsync(new NoParameters()).Result;
+
+            // Assert
+            logger.Should().HaveCount(5);
+        }
+
         public class FakePipe : IPipe
         {
             private readonly ConcurrentQueue<int> _mornitor;
             private readonly int _valueToWriteBefore;
             private readonly int _valueToWriteAfter;
 
-            public FakePipe(ConcurrentQueue<int> mornitor, int valueToWriteBefore, int valueToWriteAfter)
+            public FakePipe(ConcurrentQueue<int> mornitor, int valueToWriteBefore = 0, int valueToWriteAfter = 0)
             {
                 this._mornitor = mornitor;
                 this._valueToWriteBefore = valueToWriteBefore;

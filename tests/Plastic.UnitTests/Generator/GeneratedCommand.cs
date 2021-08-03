@@ -1,6 +1,7 @@
 ﻿namespace Plastic.UnitTests.Generator
 {
     using System.Collections.Concurrent;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using FluentAssertions;
@@ -82,11 +83,53 @@
             logger.Should().HaveCount(5);
         }
 
+        [Fact]
+        public void ExecuteAsync_does_provide_PipelineContext_to_the_pipeline()
+        {
+            // Arrange
+            var serviceCollection = new ServiceCollection();
+
+            var spyService = new ConcurrentQueue<int>();
+            serviceCollection.AddScoped(_ => spyService);
+
+            FakePipe[]? pipeline = default;
+            var pipelineBuilder = new BuildPipeline(p => pipeline = new FakePipe[]
+            {
+                new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>()),
+                new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>())
+            });
+
+            serviceCollection.UsePlastic(pipelineBuilder);
+            ServiceProvider provider = serviceCollection.BuildServiceProvider();
+            
+            var sut = new FakeCommand(provider);
+
+            // Act
+            sut.ExecuteAsync(new NoParameters()).Wait();
+
+            // Assert
+
+            pipeline!.Select(q => q.ProvidedContext!.CommandSpec)
+                        .Should()
+                        .AllBeAssignableTo<FakeCommandSpec>();
+
+            pipeline!.Select(q => q.ProvidedContext!.Parameters)
+                        .Should()
+                        .AllBeEquivalentTo(new NoParameters());
+
+            pipeline!.SelectMany(q => q.ProvidedContext!.Services)
+                        .All(q => q == spyService)
+                        .Should()
+                        .BeTrue();
+        }
+
         public class FakePipe : IPipe
         {
             private readonly ConcurrentQueue<int> _mornitor;
             private readonly int _valueToWriteBefore;
             private readonly int _valueToWriteAfter;
+
+            public PipelineContext? ProvidedContext { get; private set; }
 
             public FakePipe(ConcurrentQueue<int> mornitor, int valueToWriteBefore = 0, int valueToWriteAfter = 0)
             {
@@ -98,6 +141,8 @@
             public async Task<Response> Handle(
                 PipelineContext context, Behavior<Response> nextBehavior, CancellationToken token)
             {
+                this.ProvidedContext = context;
+
                 this._mornitor.Enqueue(this._valueToWriteBefore);
 
                 Response response = await nextBehavior.Invoke();

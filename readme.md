@@ -5,15 +5,15 @@
 [![Nuget](https://img.shields.io/nuget/v/Plastic)](https://www.nuget.org/packages/Plastic/)
 
 # 개요
-이 프로젝트는 Application에서 Usecase Layer를 위한 기초 프레임을 제공합니다.
-Web, CLI, GUI Application 등 어느 하나에 중점을 두지 않고 범용적으로 사용할 수 있습니다.
+이 프로젝트는 Application에서 Domain Layer를 노출하기 위한 기초 프레임을 제공합니다. 이 Layer에서 Usecase 표현, Doamin 캡슐화 또는 Domain 개체들 간의 Ochestration을 구성할 수도 있습니다.
 
-Usecase Layer는 Domain Layer를 외부로 노출하는 Layer이며 때때로 Domain service로 불리기도 합니다.
+이러한 Layer는 때때로 Usecase Layer 또는 Domain service로 불리기도 합니다.
 
 구현부에서는 .Net 5에서 소개된 Source Generator를 활용합니다.
 Source Generator와 같은 메타프로그래밍을 적절히 활용한다면 정통 프로그래밍에서 제공할 수 없었던 유연한 소스 코드를 제공할 수 있습니다.
 이것은 컴파일 시점에 소스코드를 생성하여 주입하기 때문에 여러분이 직접 작성한 소스 코드와 동일한 효과를 갖습니다.
 
+Web, CLI, GUI Application 등 어느 하나에 중점을 두지 않고 범용적으로 사용할 수 있습니다.
 
 이 프로젝트의 이름은 Plastic 입니다.
 
@@ -33,9 +33,11 @@ Plastic은 흔히 알려진 몇가지 주요 개념들을 중점으로 디자인
 
 ## 명령 패턴 (Command Pattern)
 Command Pattern은 개체 자체가 명령이라는 단순한 디자인 패턴입니다.
-Application에서 다루는 Usecase는 Application이 제공하는 행동을 다루기에 Command Pattern은 매우 적절합니다.
 
-Plastic에서 이 Command들은 Consumer가 직접적으로 다룰 수 있게 제일 앞단에 배치됩니다.
+일반적으로 Application은 사용자로부터 명령을 받고 그것을 처리합니다.
+때문에 이러한 Application의 Usecase는 Command Pattern으로 표현하기에 매우 적절합니다.
+
+Plastic에서 이 Command들은 사용자가 직접적으로 다룰 수 있게 제일 앞단에 배치됩니다.
 구현에서는 아래와 같은 소스코드가 이를 담당합니다.
 
 ```cs
@@ -53,10 +55,10 @@ Plastic은 명세된 `ICommandSpecification<,>` 의 구현체를 바탕으로 �
 
 
 ## 비상태 저장 (Stateless)
-Usecase 를 표현하는 모든 Command들은 Stateful 을 지원하지 않습니다.
-Usecase가 상태를 저장하는건 Business Transaction을 보장하는것에 유용하지 못합니다.
+모든 Command들은 Stateful 을 지원하지 않습니다.
+일회성으로 수행되는 Command가 상태를 저장하는건 Business Transaction을 보장하는것에 유용하지 못합니다.
 
-즉 흔히 Web에서 볼 수 있는 Seesion과 같은 도구를 지원하지 않으며 장려하지 하지 않습니다.
+즉 흔히 Web에서 볼 수 있는 Seesion과 같은 도구를 지원하지 않으며 장려하지 않습니다.
 
 ## 파이프라인 (Pipeline)
 모든 Command들은 특정한 전역 파이프라인 (Global Pipeline)을 거친 후 실행됩니다.
@@ -78,19 +80,19 @@ Platsic은 매우 높은 자유도를 제공하지 않습니다.
 
 예로 Command에서는 다른 Command들을 사용할 수 없습니다.
 물론 몇몇은 이미 작성한 Command를 재사용하고 싶을 것입니다.
-하지만 대개 이런 경우는 Usecase Layer를 더 복잡하게 만듭니다.
+하지만 대개 이런 경우는 Layer를 더 복잡하게 만듭니다.
 
-Usecase 안에서 중복 코드가 발생할 수 있습니다. 허나 Plastic은 그것을 거짓 중복으로 취급합니다.
+Command들 안에서 중복 코드가 발생할 수 있습니다. 허나 Plastic은 그것을 거짓 중복으로 취급합니다.
 
 ## 강한 결합 (Coupling)
 Command들은 모두 구현체 그대로 노출 됩니다.
 테스트, 다른 구현체 사용 등등 과 같은 명목으로 적용되는 낮은 결합(Low Coupling)은 Plastic에서 배제됩니다.
  
 Domain Service를 구축하는 사례를 보면 대개 추상화를 통한 낮은 결합 (Low Coupling)을 이루려고 합니다.
-허나 Plastic에서 Usecase들은 이것의 바깥 Layer인 Consumer 측에 강하게 결합되기를 희망합니다.
+허나 Plastic에서 Command들은 이것의 바깥 Layer인 Consumer측에 강하게 결합되기를 희망합니다.
 
-대개 바깥 Layer는 오직 이 Usecase layer를 사용하기 위해 만들어진 영역입니다. 약하게 결합될 이유가 없습니다.
-이 말은 Usecase Layer 없이 존재할 이유가 없다라는 것과 같습니다.
+대개 바깥 Layer는 오직 이 layer를 사용하기 위해 만들어진 영역입니다. 약하게 결합될 이유가 없습니다.
+이 말은 이러한 Layer 없이 존재할 이유가 없다라는 것과 같습니다.
 
 Plastic은 바깥 Layer가 이 Usecase의 변경사항에 민감하게 반응하기를 희망합니다.
 

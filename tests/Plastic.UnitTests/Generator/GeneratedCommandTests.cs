@@ -1,4 +1,4 @@
-﻿namespace Plastic.UnitTests
+﻿namespace Plastic.UnitTests.Generator
 {
     using System.Collections.Concurrent;
     using System.Threading;

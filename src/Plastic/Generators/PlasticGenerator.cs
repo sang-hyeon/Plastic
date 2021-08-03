@@ -69,7 +69,7 @@
                 commandBuilder.Replace("Plastic.TTFFResponse", responseSymbol.ToString());
                 commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
 
-                contextToAdd.AddSource($"{commandNameGenerated}.cs", commandBuilder.ToString());
+                contextToAdd.AddSource($"{userCommandSpecSymbol}_{commandNameGenerated}.cs", commandBuilder.ToString());
 
                 return new GeneratedCommandInfo(commandNameGenerated, userCommandSpecSymbol.ToString());
             }

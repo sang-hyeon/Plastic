@@ -43,8 +43,7 @@
                 BuildPipeline? pipelineBuilder = scope.ServiceProvider.GetService<BuildPipeline>();
                 IEnumerable<IPipe> pipeline = pipelineBuilder?.Invoke(scope.ServiceProvider) ?? Array.Empty<IPipe>();
                 pipeline = pipeline.Reverse();
-
-                var context = new PipelineContext(param, typeof(TargetCommandSpec));
+                PipelineContext context = CreatePipelineContext(param, scope.ServiceProvider);
 
                 Behavior<Response> command = CreateCommandAsBehavior(scope.ServiceProvider, param, token);
                 Behavior<Response> process =
@@ -54,6 +53,18 @@
             }
 
             return response;
+        }
+
+        private static PipelineContext CreatePipelineContext(TargetParameter param, IServiceProvider provider)
+        {
+            object?[] services = new object?[]
+            {
+                provider.GetService<IServiceProvider>() // will be changed on template
+            };
+
+            object[] servicesFound = services.OfType<object>().ToArray();
+
+            return new PipelineContext(param, typeof(TargetCommandSpec), servicesFound);
         }
 
         private static Behavior<Response> CreateCommandAsBehavior(

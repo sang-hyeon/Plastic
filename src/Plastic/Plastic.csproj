@@ -11,7 +11,7 @@
 
   <!--  -->
   <PropertyGroup>
-    <Version>0.1.4</Version>
+    <Version>0.1.5</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>SangHyeon.Kim</Authors>
@@ -20,7 +20,7 @@
     <PackageProjectUrl>https://github.com/sang-hyeon/Plastic</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sang-hyeon/Plastic</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageTags>Domain Service;Clean Architecture;Usecase;Command;Command pattern;Plastic</PackageTags>
+    <PackageTags>domain-service;clean-architecture;usecase;command;command-pattern;plastic;cqrs</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>    
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

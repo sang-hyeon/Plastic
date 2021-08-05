@@ -1,10 +1,12 @@
 ﻿> 이 프로젝트는 아직 초기 개발 단계입니다. 하기 내용에서 다루어진 주요 컨셉은 대부분 구현되지 않았습니다.
+
+> This project is still in Development. Most of the key concepts discussed below have not been implemented.
 <br>
 
 [![Build Main](https://github.com/sang-hyeon/Plastic/actions/workflows/github_actions.yml/badge.svg?branch=main)](https://github.com/sang-hyeon/Plastic/actions/workflows/github_actions.yml)
 [![Nuget](https://img.shields.io/nuget/v/Plastic)](https://www.nuget.org/packages/Plastic/)
 
-# 개요
+# Abstract
 이 프로젝트는 Application에서 Domain Layer를 노출하기 위한 기초 프레임을 제공합니다. 이 Layer에서 Usecase 표현, Doamin 캡슐화 또는 Domain 개체들 간의 Ochestration을 구성할 수도 있습니다.
 
 이러한 Layer는 때때로 Usecase Layer 또는 Domain service로 불리기도 합니다.
@@ -17,7 +19,51 @@ Web, CLI, GUI Application 등 어느 하나에 중점을 두지 않고 범용적
 
 이 프로젝트의 이름은 Plastic 입니다.
 
-# 아키텍처
+# Quick Start
+```cs
+// [CommandName("AddCommand")]
+class AddCommandSpec : CommandSpecificationBase<AddParam, AddResponse>
+{
+        public AddCommandSpec(IMyCalculator calculator)
+        {
+                ...
+        }
+
+        public override Task<AddResponse> ExecuteAsync(AddParam param, CancellationToken token = default)
+        {
+                ...
+        }
+        
+        public override Task<Response> CanExecuteAsync(AddParam param, CancellationToken token = default)
+        {
+            return RespondWithSuccess();
+        }
+
+}
+
+// --
+
+void Configure(IServiceCollection services)
+{
+        var pipelineBuilder = new BuildPipeline(...);
+
+        services.UsePlastic(pipelineBuilder);
+}
+
+// --
+
+class AddController : ControllerBase
+{
+        public AddController(AddCommand addCommand)
+        {
+                ...
+        }
+}
+
+```
+
+
+# Architecture
 Plastic은 흔히 알려진 몇가지 주요 개념들을 중점으로 디자인되었습니다.
 
 * 명령 패턴 (Commad Pattern)

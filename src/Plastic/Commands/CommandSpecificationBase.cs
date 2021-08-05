@@ -8,9 +8,9 @@
         where TParam : CommandParameters
         where TResponse : Response
     {
-        public abstract Task<Response> CanExecuteAsync(TParam request, CancellationToken token = default);
+        public abstract Task<Response> CanExecuteAsync(TParam param, CancellationToken token = default);
 
-        public abstract Task<TResponse> ExecuteAsync(TParam request, CancellationToken token = default);
+        public abstract Task<TResponse> ExecuteAsync(TParam param, CancellationToken token = default);
 
         protected static Task<T> RespondWith<T>(T item)
             where T : Response

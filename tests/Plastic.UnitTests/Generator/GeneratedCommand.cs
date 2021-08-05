@@ -162,13 +162,13 @@
                 this._logger = logger;
             }
 
-            public override Task<Response> CanExecuteAsync(NoParameters request, CancellationToken token = default)
+            public override Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default)
             {
                 this._logger?.Enqueue(-1);
                 return RespondWithSuccess();
             }
 
-            public override Task<Response> ExecuteAsync(NoParameters request, CancellationToken token = default)
+            public override Task<Response> ExecuteAsync(NoParameters param, CancellationToken token = default)
             {
                 this._logger?.Enqueue(-1);
                 return RespondWithSuccess();

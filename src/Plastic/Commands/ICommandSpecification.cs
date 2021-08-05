@@ -12,12 +12,14 @@
         Task<Response> CanExecuteAsync(TParam param, CancellationToken token = default);
     }
 
-    public interface ICommandSpecification<TResponse> : ICommandSpecification<NoParameters, TResponse>
+    public interface ICommandSpecification<TResponse>
+        : ICommandSpecification<NoParameters, TResponse>
         where TResponse : Response
     {
     }
 
-    public interface ICommandSpecification : ICommandSpecification<NoParameters, Response>
+    public interface ICommandSpecification
+        : ICommandSpecification<NoParameters, Response>
     {
     }
 }

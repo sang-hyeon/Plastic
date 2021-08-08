@@ -10,8 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Generator\Data\CommandSpec_Abstract.cs" />
-    <EmbeddedResource Include="Generator\Data\CommandSpec_Abstract.cs" />
+    <Compile Remove="Generator\TestSet\CommandSpec_Abstract.cs" />
+    <EmbeddedResource Include="Generator\TestSet\CommandSpec_Abstract.cs" />
   </ItemGroup>
 
   <ItemGroup>

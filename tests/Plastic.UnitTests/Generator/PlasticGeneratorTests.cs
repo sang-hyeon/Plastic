@@ -12,7 +12,7 @@
 
     public class PlasticGeneratorTests
     {
-        private const string DATA_PREFIX = "Plastic.UnitTests.Generator.Data.";
+        private const string DATA_PREFIX = "Plastic.UnitTests.Generator.TestSet.";
 
         [Fact]
         public void Generator_does_not_generate_a_command_if_CommandSpec_is_abstract_class()

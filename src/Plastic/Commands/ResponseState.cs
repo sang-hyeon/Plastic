@@ -1,14 +1,14 @@
 ﻿namespace Plastic
 {
-    public record ResponseState
+    public record Response
     {
-        public readonly bool Success;
+        public readonly bool Result;
 
         public readonly string? Message;
 
-        internal ResponseState(bool success = true, string? message = default)
+        internal Response(bool result = true, string? message = default)
         {
-            this.Success = success;
+            this.Result = result;
             this.Message = message;
         }
     }

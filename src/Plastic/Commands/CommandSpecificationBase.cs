@@ -3,60 +3,44 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public abstract class CommandSpecificationBase<TParam, TResponse>
-        : ICommandSpecification<TParam, TResponse>
+    public abstract class CommandSpecificationBase<TParam, TResult>
+        : ICommandSpecification<TParam, TResult>
         where TParam : CommandParameters
-        where TResponse : Response
+        where TResult : ExecutionResult
     {
         public abstract Task<Response> CanExecuteAsync(TParam param, CancellationToken token = default);
 
-        public abstract Task<TResponse> ExecuteAsync(TParam param, CancellationToken token = default);
+        public abstract Task<TResult> ExecuteAsync(TParam param, CancellationToken token = default);
 
-        protected static Task<T> RespondWith<T>(T item)
-            where T : Response
+        protected static Task<ExecutionResult> Success()
         {
-            return Task.FromResult(item);
+            return Task.FromResult(new ExecutionResult());
         }
 
-        protected static Task<Response> RespondWithSuccess()
+        protected static Task<ExecutionResult> Failure(string? message)
         {
-            return Task.FromResult(Success());
+            return Task.FromResult(new ExecutionResult(false, message));
         }
 
-        protected static Task<Response> RespondWithFailure(string? message = default)
+        protected static Task<Response> CanBeExecuted()
         {
-            return Task.FromResult(Failure(message));
+            return Task.FromResult(new Response());
         }
 
-        protected static Response Success()
+        protected static Task<Response> CannotBeExecuted(string? message)
         {
-            return new Response(true, null);
-        }
-
-        protected static Response Failure(string? message = null)
-        {
-            return new Response(false, message);
-        }
-
-        protected static ResponseState SuccessState()
-        {
-            return new ResponseState(true, null);
-        }
-
-        protected static ResponseState FailureState(string? message = null)
-        {
-            return new ResponseState(false, message);
+            return Task.FromResult(new Response(false, message));
         }
     }
 
-    public abstract class CommandSpecificationBase<TResponse>
-        : CommandSpecificationBase<NoParameters, TResponse>
-        where TResponse : Response
+    public abstract class CommandSpecificationBase<TResult>
+        : CommandSpecificationBase<NoParameters, TResult>
+        where TResult : ExecutionResult
     {
     }
 
     public abstract class CommandSpecificationBase
-        : CommandSpecificationBase<Response>
+        : CommandSpecificationBase<ExecutionResult>
     {
     }
 }

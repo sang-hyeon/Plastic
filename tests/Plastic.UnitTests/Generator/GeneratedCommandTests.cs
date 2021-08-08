@@ -23,7 +23,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            Response response = sut.ExecuteAsync(new NoParameters()).Result;
+            ExecutionResult response = sut.ExecuteAsync(new NoParameters()).Result;
 
             // Assert
             response.HasSucceed().Should().BeTrue();
@@ -50,7 +50,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            Response response = sut.ExecuteAsync(new NoParameters()).Result;
+            ExecutionResult response = sut.ExecuteAsync(new NoParameters()).Result;
 
             // Assert
             int[] expectedLog = new int[] { 1, 3, 5, -1, 6, 4, 2 };
@@ -77,7 +77,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            Response response = sut.ExecuteAsync(new NoParameters()).Result;
+            ExecutionResult response = sut.ExecuteAsync(new NoParameters()).Result;
 
             // Assert
             logger.Should().HaveCount(5);
@@ -138,14 +138,14 @@
                 this._valueToWriteAfter = valueToWriteAfter;
             }
 
-            public async Task<Response> Handle(
-                PipelineContext context, Behavior<Response> nextBehavior, CancellationToken token)
+            public async Task<ExecutionResult> Handle(
+                PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token)
             {
                 this.ProvidedContext = context;
 
                 this._mornitor.Enqueue(this._valueToWriteBefore);
 
-                Response response = await nextBehavior.Invoke();
+                ExecutionResult response = await nextBehavior.Invoke();
 
                 this._mornitor.Enqueue(this._valueToWriteAfter);
 
@@ -165,13 +165,13 @@
             public override Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default)
             {
                 this._logger?.Enqueue(-1);
-                return RespondWithSuccess();
+                return CanBeExecuted();
             }
 
-            public override Task<Response> ExecuteAsync(NoParameters param, CancellationToken token = default)
+            public override Task<ExecutionResult> ExecuteAsync(NoParameters param, CancellationToken token = default)
             {
                 this._logger?.Enqueue(-1);
-                return RespondWithSuccess();
+                return Success();
             }
         }
     }

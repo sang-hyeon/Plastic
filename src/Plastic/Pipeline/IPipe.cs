@@ -5,10 +5,10 @@
 
     public interface IPipe
     {
-        Task<Response> Handle(
-            PipelineContext context, Behavior<Response> nextBehavior, CancellationToken token);
+        Task<ExecutionResult> Handle(
+            PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token);
     }
 
-    public delegate Task<TResponse> Behavior<TResponse>()
-        where TResponse : Response;
+    public delegate Task<TResult> Behavior<TResult>()
+        where TResult : ExecutionResult;
 }

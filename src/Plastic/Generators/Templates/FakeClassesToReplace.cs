@@ -7,10 +7,10 @@
     {
     }
 
-    internal record TTFFResponse : Response
+    internal record TTFFResponse : ExecutionResult
     {
-        protected internal TTFFResponse(ResponseState state)
-            : base(state)
+        protected internal TTFFResponse(Response response)
+            : base(response)
         {
         }
     }
@@ -19,12 +19,12 @@
     {
         public override Task<Response> CanExecuteAsync(TTFFParameter param, CancellationToken token = default)
         {
-            return RespondWithSuccess();
+            return Task.FromResult(new Response());
         }
 
         public override Task<TTFFResponse> ExecuteAsync(TTFFParameter param, CancellationToken token = default)
         {
-            return Task.FromResult(new TTFFResponse(SuccessState()));
+            return Task.FromResult(new TTFFResponse(new Response()));
         }
     }
 }

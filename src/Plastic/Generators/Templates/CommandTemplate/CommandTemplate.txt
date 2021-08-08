@@ -6,13 +6,13 @@ namespace Plastic.Commands
     using System.Threading;
     using System.Threading.Tasks;
     using TargetParameter = Plastic.TTFFParameter;
-    using TargetResponse = Plastic.TTFFResponse;
+    using TargetResult = Plastic.TTFFResponse;
     using TargetCommandSpec = Plastic.TTFFCommandSpec;
     using Microsoft.Extensions.DependencyInjection;
 
 #nullable enable
 
-    public sealed class TTFFCommand : ICommandSpecification<TargetParameter, TargetResponse>
+    public sealed class TTFFCommand : ICommandSpecification<TargetParameter, TargetResult>
     {
         private readonly IServiceProvider _provider;
 
@@ -35,9 +35,9 @@ namespace Plastic.Commands
             return response;
         }
 
-        public async Task<TargetResponse> ExecuteAsync(TargetParameter param, CancellationToken token = default)
+        public async Task<TargetResult> ExecuteAsync(TargetParameter param, CancellationToken token = default)
         {
-            TargetResponse response;
+            TargetResult response;
             using (IServiceScope scope = this._provider.CreateScope())
             {
                 BuildPipeline? pipelineBuilder = scope.ServiceProvider.GetService<BuildPipeline>();
@@ -45,11 +45,11 @@ namespace Plastic.Commands
                 pipeline = pipeline.Reverse();
                 PipelineContext context = CreatePipelineContext(param, scope.ServiceProvider);
 
-                Behavior<Response> command = CreateCommandAsBehavior(scope.ServiceProvider, param, token);
-                Behavior<Response> process =
+                Behavior<ExecutionResult> command = CreateCommandAsBehavior(scope.ServiceProvider, param, token);
+                Behavior<ExecutionResult> process =
                     pipeline.Aggregate(command, (next, pipe) => () => pipe.Handle(context, next, token));
 
-                response = (TargetResponse)await process.Invoke().ConfigureAwait(false);
+                response = (TargetResult)await process.Invoke().ConfigureAwait(false);
             }
 
             return response;
@@ -67,14 +67,14 @@ namespace Plastic.Commands
             return new PipelineContext(param, typeof(TargetCommandSpec), servicesFound);
         }
 
-        private static Behavior<Response> CreateCommandAsBehavior(
+        private static Behavior<ExecutionResult> CreateCommandAsBehavior(
             IServiceProvider provider, TargetParameter param, CancellationToken token = default)
         {
-            return new Behavior<Response>(() =>
+            return new Behavior<ExecutionResult>(() =>
             {
                 TargetCommandSpec spec = provider.GetRequiredService<TargetCommandSpec>();
                 return spec.ExecuteAsync(param, token)
-                            .ContinueWith(task => (Response)task.Result, default, TaskContinuationOptions.None, TaskScheduler.Current);
+                            .ContinueWith(task => (ExecutionResult)task.Result, default, TaskContinuationOptions.None, TaskScheduler.Current);
             });
         }
     }

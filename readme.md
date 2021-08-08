@@ -95,10 +95,10 @@ public interface ICommandSpecification<in TParam, TResult>
 Plastic은 명세된 `ICommandSpecification<,>` 의 구현체를 바탕으로 사용가능한 Command를 생성합니다.
 > 생성된 Command에는 Pipeline을 연결하는 코드들이 포함됩니다.
 
-<br>
-
-또한 아래와 같은 여러 추상체가 다양한 시나리오를 지원합니다. <br>
+그러나 이 Interface는 최상위 추상체이며 이를 바탕으로 구현하는것은 불가능 할 것입니다.
 작성자는 아래와 같은 추상체를 사용해야 합니다.
+
+또한 명령의 다양한 시나리오를 지원합니다. <br>
 
 ```cs
     public abstract class CommandSpecificationBase<TParam, TResult>

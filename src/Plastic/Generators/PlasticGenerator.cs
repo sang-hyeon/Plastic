@@ -61,8 +61,10 @@
                 ITypeSymbol responseSymbol = commandSpecInterface.TypeArguments[1];
 
                 string codeForServicesToBeProvided = BuildServiceInjectionCodeForPipelineContext(userCommandSpecSymbol);
+                string @namespace = userCommandSpecSymbol.ContainingNamespace.ToString();
 
                 var commandBuilder = new StringBuilder(commandTemplate);
+                commandBuilder.Replace("{{ Namespace }}", @namespace);
                 commandBuilder.Replace("Plastic.TTFFCommandSpec", userCommandSpecSymbol.ToString());
                 commandBuilder.Replace("TTFFCommand", commandNameGenerated);
                 commandBuilder.Replace("Plastic.TTFFParameter", paramSymbol.ToString());
@@ -71,7 +73,7 @@
 
                 contextToAdd.AddSource($"{userCommandSpecSymbol}_{commandNameGenerated}.cs", commandBuilder.ToString());
 
-                return new GeneratedCommandInfo(commandNameGenerated, userCommandSpecSymbol.ToString());
+                return new GeneratedCommandInfo(@namespace + "." +commandNameGenerated, userCommandSpecSymbol.ToString());
             }
             else
                 return default;
@@ -104,7 +106,7 @@
                 builder.AppendLine($"\t\t\tservices.AddTransient(typeof({commandName.GeneratedCommandName}));");
             }
 
-            string generatedCode = template.Replace("{{AddServices}}", builder.ToString());
+            string generatedCode = template.Replace("{{ ServicesToBeAdded }}", builder.ToString());
             contextToAdd.AddSource("PlasticInitializer.cs", generatedCode);
         }
 
@@ -158,16 +160,23 @@
             private void OnVisitTypeDeclarationSyntax(GeneratorSyntaxContext context, TypeDeclarationSyntax typeSyntax)
             {
                 ISymbol? symbole = context.SemanticModel.GetDeclaredSymbol(typeSyntax);
-                if (symbole is INamedTypeSymbol namedSymbol && namedSymbol.IsAbstract == false)
+                if (symbole is INamedTypeSymbol namedSymbol)
                 {
-                    INamedTypeSymbol commandSpecSymbol =
-                        context.SemanticModel.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_FULL_NAME)!;
-
-                    if (namedSymbol.AllInterfaces.Any(q => q.ConstructedFrom == commandSpecSymbol))
+                    if (IsValid(namedSymbol, context))
                     {
                         this.Targets.Add(typeSyntax);
                     }
                 }
+            }
+
+            private static bool IsValid(INamedTypeSymbol target, GeneratorSyntaxContext context)
+            {
+                INamedTypeSymbol commandSpecSymbol =
+                    context.SemanticModel.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_FULL_NAME)!;
+
+                return target.IsAbstract == false
+                         && target.AllInterfaces.Any(q => q.ConstructedFrom == commandSpecSymbol)
+                         && target.ContainingNamespace.GetTypeMembers().Contains(target);
             }
         }
     }

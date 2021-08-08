@@ -7,7 +7,6 @@
     using FluentAssertions;
     using Microsoft.Extensions.DependencyInjection;
     using Plastic;
-    using Plastic.Commands;
     using Xunit;
 
     public class GeneratedCommand
@@ -122,57 +121,57 @@
                         .Should()
                         .BeTrue();
         }
+    }
 
-        public class FakePipe : IPipe
+    public class FakePipe : IPipe
+    {
+        private readonly ConcurrentQueue<int> _mornitor;
+        private readonly int _valueToWriteBefore;
+        private readonly int _valueToWriteAfter;
+
+        public PipelineContext? ProvidedContext { get; private set; }
+
+        public FakePipe(ConcurrentQueue<int> mornitor, int valueToWriteBefore = 0, int valueToWriteAfter = 0)
         {
-            private readonly ConcurrentQueue<int> _mornitor;
-            private readonly int _valueToWriteBefore;
-            private readonly int _valueToWriteAfter;
-
-            public PipelineContext? ProvidedContext { get; private set; }
-
-            public FakePipe(ConcurrentQueue<int> mornitor, int valueToWriteBefore = 0, int valueToWriteAfter = 0)
-            {
-                this._mornitor = mornitor;
-                this._valueToWriteBefore = valueToWriteBefore;
-                this._valueToWriteAfter = valueToWriteAfter;
-            }
-
-            public async Task<ExecutionResult> Handle(
-                PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token)
-            {
-                this.ProvidedContext = context;
-
-                this._mornitor.Enqueue(this._valueToWriteBefore);
-
-                ExecutionResult response = await nextBehavior.Invoke();
-
-                this._mornitor.Enqueue(this._valueToWriteAfter);
-
-                return response;
-            }
+            this._mornitor = mornitor;
+            this._valueToWriteBefore = valueToWriteBefore;
+            this._valueToWriteAfter = valueToWriteAfter;
         }
 
-        public class FakeCommandSpec : CommandSpecificationBase
+        public async Task<ExecutionResult> Handle(
+            PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token)
         {
-            private readonly ConcurrentQueue<int>? _logger;
+            this.ProvidedContext = context;
 
-            public FakeCommandSpec(ConcurrentQueue<int>? logger = null)
-            {
-                this._logger = logger;
-            }
+            this._mornitor.Enqueue(this._valueToWriteBefore);
 
-            public override Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default)
-            {
-                this._logger?.Enqueue(-1);
-                return CanBeExecuted();
-            }
+            ExecutionResult response = await nextBehavior.Invoke();
 
-            public override Task<ExecutionResult> ExecuteAsync(NoParameters param, CancellationToken token = default)
-            {
-                this._logger?.Enqueue(-1);
-                return Success();
-            }
+            this._mornitor.Enqueue(this._valueToWriteAfter);
+
+            return response;
+        }
+    }
+
+    public class FakeCommandSpec : CommandSpecificationBase
+    {
+        private readonly ConcurrentQueue<int>? _logger;
+
+        public FakeCommandSpec(ConcurrentQueue<int>? logger = null)
+        {
+            this._logger = logger;
+        }
+
+        public override Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default)
+        {
+            this._logger?.Enqueue(-1);
+            return CanBeExecuted();
+        }
+
+        public override Task<ExecutionResult> ExecuteAsync(NoParameters param, CancellationToken token = default)
+        {
+            this._logger?.Enqueue(-1);
+            return Success();
         }
     }
 }

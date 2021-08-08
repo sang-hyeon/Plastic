@@ -11,7 +11,9 @@
 
   <ItemGroup>
     <Compile Remove="Generator\TestSet\CommandSpec_Abstract.cs" />
+    <Compile Remove="Generator\TestSet\CommandSpec_InnerClass.cs" />
     <EmbeddedResource Include="Generator\TestSet\CommandSpec_Abstract.cs" />
+    <EmbeddedResource Include="Generator\TestSet\CommandSpec_InnerClass.cs" />
   </ItemGroup>
 
   <ItemGroup>

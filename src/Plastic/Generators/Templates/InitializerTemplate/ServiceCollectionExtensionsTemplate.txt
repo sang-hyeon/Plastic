@@ -1,7 +1,6 @@
 ﻿namespace Plastic
 {
     using Microsoft.Extensions.DependencyInjection;
-    using Plastic.Commands;
 
     public static class ServiceCollectionExtensions
     {
@@ -15,7 +14,7 @@
 
         private static void AddGeneratedCommands(IServiceCollection services)
         {
-{{AddServices}}
+{{ ServicesToBeAdded }}
         }
     }
 }

@@ -1,4 +1,4 @@
-namespace Plastic.Commands
+namespace {{ Namespace }}
 {
     using System;
     using System.Collections.Generic;

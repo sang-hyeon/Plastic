@@ -1,4 +1,5 @@
-﻿namespace Plastic.Generators
+﻿#pragma warning disable
+namespace Plastic.Generators
 {
     using Microsoft.Extensions.DependencyInjection;
     using Plastic.Commands;
@@ -19,3 +20,4 @@
         }
     }
 }
+#pragma warning restore

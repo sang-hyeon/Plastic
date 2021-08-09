@@ -1,4 +1,6 @@
-﻿namespace Plastic.Commands
+﻿#pragma warning disable
+#nullable enable
+namespace Plastic.Commands
 {
     using Plastic;
     using System;
@@ -11,7 +13,6 @@
     using TargetCommandSpec = Plastic.TTFFCommandSpec;
     using Microsoft.Extensions.DependencyInjection;
 
-#nullable enable
 
     internal sealed class TTFFCommand : ICommandSpecification<TargetParameter, TargetResult>
     {
@@ -79,5 +80,6 @@
             });
         }
     }
-#nullable disable
 }
+#nullable disable
+#pragma warning restore

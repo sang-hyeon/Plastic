@@ -1,4 +1,5 @@
-﻿namespace Plastic
+﻿#pragma warning disable
+namespace Plastic
 {
     using Microsoft.Extensions.DependencyInjection;
 
@@ -18,3 +19,4 @@
         }
     }
 }
+#pragma warning restore

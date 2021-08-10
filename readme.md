@@ -3,7 +3,7 @@
 [![Nuget](https://img.shields.io/nuget/v/Plastic)](https://www.nuget.org/packages/Plastic/)
 
 # Abstract
-This project provides encapsulation of things like Domain, Application Rules, Business Rules or Business Logic in Application. Command pattern has used for this.
+This project provides encapsulation of things like Domain, Application Rules, Business Rules or Business Logic in Application. For this, Command pattern is used.
 
 All applications such as Web, CLI, GUI application can use this project.
 This can be part of the Usecase Layer, Domain Service Layer or CQRS.

@@ -25,7 +25,7 @@
             ExecutionResult response = sut.ExecuteAsync(new NoParameters()).Result;
 
             // Assert
-            response.HasSucceed().Should().BeTrue();
+            response.HasSucceeded().Should().BeTrue();
         }
 
         [Fact]

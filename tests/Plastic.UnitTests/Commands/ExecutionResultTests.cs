@@ -56,7 +56,7 @@
             var sut = new ExecutionResult(expectedSuccess, string.Empty);
 
             // Act
-            bool succeed = sut.HasSucceed();
+            bool succeed = sut.HasSucceeded();
 
             // Assert
             succeed.Should().Be(expectedSuccess);

@@ -19,7 +19,7 @@
             this.Response = state;
         }
 
-        public bool HasSucceed()
+        public bool HasSucceeded()
         {
             return this.Response.Result;
         }

@@ -20,7 +20,7 @@ jobs:
     - name: Build Plastic
       run: dotnet build -c Release
       
-    # tests blocks to run,
+    # test blocks to run,
     # - name: Test 
     #   run: dotnet test -c Release --no-build
         

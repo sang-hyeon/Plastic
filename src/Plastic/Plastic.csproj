@@ -11,12 +11,15 @@
 
   <!--  -->
   <PropertyGroup>
-    <Version>0.2.1</Version>
+    <Version>0.2.2</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>SangHyeon.Kim</Authors>
     <Copyright>SangHyeon.Kim</Copyright>
-    <Description>This project provides the basic frame for the Usecase Layer in Application.</Description>
+    <Description>This project provides encapsulation of things like Domain, Application Rules, Business Rules or Business Logic in Application. For this, Command pattern is used.
+
+All applications such as Web, CLI, GUI application can use this project.
+This can be part of the Usecase Layer, Domain Service Layer or CQRS.</Description>
     <PackageProjectUrl>https://github.com/sang-hyeon/Plastic</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sang-hyeon/Plastic</RepositoryUrl>
     <RepositoryType>git</RepositoryType>

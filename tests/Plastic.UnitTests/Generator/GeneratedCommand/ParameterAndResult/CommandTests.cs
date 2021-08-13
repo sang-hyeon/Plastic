@@ -39,7 +39,7 @@
             var logger = new ConcurrentQueue<int>();
             serviceCollection.AddTransient(_ => logger);
 
-            var pipeline = new BuildPipeline(_ => new IPipe[]
+            var pipeline = new BuildPipeline(_ => new Pipe[]
             {
                 new FakePipe(logger, 1, 2),
                 new FakePipe(logger, 3, 4),
@@ -68,7 +68,7 @@
             var logger = new ConcurrentQueue<int>();
             serviceCollection.AddScoped(_ => logger);
 
-            var pipeline = new BuildPipeline(p => new IPipe[]
+            var pipeline = new BuildPipeline(p => new Pipe[]
             {
                 new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>()),
                 new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>())
@@ -128,7 +128,7 @@
         }
     }
 
-    public class FakePipe : IPipe
+    public class FakePipe : Pipe
     {
         private readonly ConcurrentQueue<int> _mornitor;
         private readonly int _valueToWriteBefore;
@@ -143,7 +143,7 @@
             this._valueToWriteAfter = valueToWriteAfter;
         }
 
-        public async Task<ExecutionResult> Handle(
+        public override async Task<ExecutionResult> Handle(
             PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token)
         {
             this.ProvidedContext = context;

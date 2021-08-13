@@ -3,9 +3,13 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public interface IPipe
+    public abstract class Pipe : CanCreateResults
     {
-        Task<ExecutionResult> Handle(
+        public Pipe()
+        {
+        }
+
+        public abstract Task<ExecutionResult> Handle(
             PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token);
     }
 

@@ -43,7 +43,7 @@ namespace Plastic.Commands
             using (IServiceScope scope = this._provider.CreateScope())
             {
                 BuildPipeline? pipelineBuilder = scope.ServiceProvider.GetService<BuildPipeline>();
-                IEnumerable<IPipe> pipeline = pipelineBuilder?.Invoke(scope.ServiceProvider) ?? Array.Empty<IPipe>();
+                IEnumerable<Pipe> pipeline = pipelineBuilder?.Invoke(scope.ServiceProvider) ?? Array.Empty<Pipe>();
                 pipeline = pipeline.Reverse();
                 PipelineContext context = CreatePipelineContext(param, scope.ServiceProvider);
 

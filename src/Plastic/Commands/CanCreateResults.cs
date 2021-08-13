@@ -4,8 +4,12 @@
     using System.Threading.Tasks;
 
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class CommandSpecInnerBase
+    public abstract class CanCreateResults
     {
+        internal CanCreateResults()
+        {
+        }
+
         protected static ExecutionResult Success()
                => new ExecutionResult(true);
 

@@ -4,7 +4,7 @@
     using System.Threading.Tasks;
 
     public abstract class ParameterlessCommandSpecificationBase
-        : CommandSpecInnerBase, ICommandSpecification<NoParameters, ExecutionResult>
+        : CanCreateResults, ICommandSpecification<NoParameters, ExecutionResult>
     {
         public abstract Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default);
 
@@ -12,7 +12,7 @@
     }
 
     public abstract class ParameterlessCommandSpecificationBase<TResult>
-        : CommandSpecInnerBase, ICommandSpecification<NoParameters, ExecutionResult<TResult>>
+        : CanCreateResults, ICommandSpecification<NoParameters, ExecutionResult<TResult>>
     {
         public abstract Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default);
 
@@ -20,7 +20,7 @@
     }
 
     public abstract class CommandSpecificationBase<TParam, TResult>
-        : CommandSpecInnerBase, ICommandSpecification<TParam, ExecutionResult<TResult>>
+        : CanCreateResults, ICommandSpecification<TParam, ExecutionResult<TResult>>
     {
         public abstract Task<Response> CanExecuteAsync(TParam param, CancellationToken token = default);
 
@@ -28,7 +28,7 @@
     }
 
     public abstract class CommandSpecificationBase<TParam>
-        : CommandSpecInnerBase, ICommandSpecification<TParam, ExecutionResult>
+        : CanCreateResults, ICommandSpecification<TParam, ExecutionResult>
     {
         public abstract Task<Response> CanExecuteAsync(TParam param, CancellationToken token = default);
 

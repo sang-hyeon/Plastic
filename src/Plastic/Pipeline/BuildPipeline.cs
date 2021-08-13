@@ -3,5 +3,5 @@
     using System;
     using System.Collections.Generic;
 
-    public delegate IEnumerable<IPipe> BuildPipeline(IServiceProvider provider);
+    public delegate IEnumerable<Pipe> BuildPipeline(IServiceProvider provider);
 }

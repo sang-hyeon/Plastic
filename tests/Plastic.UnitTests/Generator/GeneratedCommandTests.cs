@@ -165,13 +165,13 @@
         public override Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default)
         {
             this._logger?.Enqueue(-1);
-            return CanBeExecuted();
+            return CanBeExecutedTask();
         }
 
         public override Task<ExecutionResult> ExecuteAsync(NoParameters param, CancellationToken token = default)
         {
             this._logger?.Enqueue(-1);
-            return Success();
+            return SuccessTask();
         }
     }
 }

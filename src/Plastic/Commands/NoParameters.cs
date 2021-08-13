@@ -1,6 +1,6 @@
 ﻿namespace Plastic
 {
-    public sealed record NoParameters : CommandParameters
+    public sealed record NoParameters
     {
     }
 }

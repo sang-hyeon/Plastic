@@ -1,27 +1,15 @@
 ﻿namespace Plastic
 {
-    public record ExecutionResult
+    public record Response
     {
-        public readonly Response Response;
+        public readonly bool Result;
 
-        internal protected ExecutionResult()
-            : this(true, default)
-        {
-        }
+        public readonly string? Message;
 
-        internal protected ExecutionResult(bool success, string? message)
-           : this(new Response(success, message))
+        internal Response(bool result = true, string? message = default)
         {
-        }
-
-        internal protected ExecutionResult(Response state)
-        {
-            this.Response = state;
-        }
-
-        public bool HasSucceeded()
-        {
-            return this.Response.Result;
+            this.Result = result;
+            this.Message = message;
         }
     }
 }

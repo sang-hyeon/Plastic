@@ -65,10 +65,10 @@
 
                 var commandBuilder = new StringBuilder(commandTemplate);
                 commandBuilder.Replace("{{ Namespace }}", @namespace);
+                commandBuilder.Replace("Plastic.ExecutionResult<Plastic.TTFFResult>", responseSymbol.ToString());
                 commandBuilder.Replace("Plastic.TTFFCommandSpec", userCommandSpecSymbol.ToString());
+                commandBuilder.Replace("TargetParameter", paramSymbol.ToString());
                 commandBuilder.Replace("TTFFCommand", commandNameGenerated);
-                commandBuilder.Replace("Plastic.TTFFParameter", paramSymbol.ToString());
-                commandBuilder.Replace("Plastic.TTFFResponse", responseSymbol.ToString());
                 commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
 
                 contextToAdd.AddSource($"{userCommandSpecSymbol}_{commandNameGenerated}.cs", commandBuilder.ToString());

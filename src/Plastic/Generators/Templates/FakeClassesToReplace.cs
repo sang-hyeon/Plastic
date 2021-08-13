@@ -3,28 +3,24 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal record TTFFParameter : CommandParameters
+    internal record TTFFParameter
     {
     }
 
-    internal record TTFFResponse : ExecutionResult
+    internal record TTFFResult
     {
-        protected internal TTFFResponse(Response response)
-            : base(response)
-        {
-        }
     }
 
-    internal class TTFFCommandSpec : CommandSpecificationBase<TTFFParameter, TTFFResponse>
+    internal class TTFFCommandSpec : CommandSpecificationBase<TTFFParameter, TTFFResult>
     {
         public override Task<Response> CanExecuteAsync(TTFFParameter param, CancellationToken token = default)
         {
-            return Task.FromResult(new Response());
+            return CanBeExecutedTask();
         }
 
-        public override Task<TTFFResponse> ExecuteAsync(TTFFParameter param, CancellationToken token = default)
+        public override Task<ExecutionResult<TTFFResult>> ExecuteAsync(TTFFParameter param, CancellationToken token = default)
         {
-            return Task.FromResult(new TTFFResponse(new Response()));
+            return SuccessTask(new TTFFResult());
         }
     }
 }

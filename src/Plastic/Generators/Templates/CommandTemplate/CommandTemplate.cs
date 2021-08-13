@@ -8,8 +8,8 @@ namespace Plastic.Commands
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using TargetParameter = Plastic.TTFFParameter;
-    using TargetResult = Plastic.TTFFResponse;
+    using TargetResult = Plastic.ExecutionResult<Plastic.TTFFResult>;
+    using TargetParameter = TTFFParameter;
     using TargetCommandSpec = Plastic.TTFFCommandSpec;
     using Microsoft.Extensions.DependencyInjection;
 

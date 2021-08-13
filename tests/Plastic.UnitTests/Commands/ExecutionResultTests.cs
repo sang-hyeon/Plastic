@@ -22,8 +22,8 @@
             var sut = new ExecutionResult(expectedSuccess, expectedMessage);
 
             // Assert
-            sut.Response.Result.Should().Be(expectedSuccess);
-            sut.Response.Message.Should().Be(expectedMessage);
+            sut.Result.Should().Be(expectedSuccess);
+            sut.Message.Should().Be(expectedMessage);
         }
 
         [Theory]
@@ -41,10 +41,11 @@
             var expectedState = new Response(expectedSuccess, expectedMessage);
 
             // Act
-            var sut = new Plastic.ExecutionResult(expectedState);
+            var sut = new ExecutionResult(expectedState);
 
             // Assert
-            sut.Response.Should().Be(expectedState);
+            sut.Result.Should().Be(expectedState.Result);
+            sut.Message.Should().Be(expectedState.Message);
         }
 
         [Theory]

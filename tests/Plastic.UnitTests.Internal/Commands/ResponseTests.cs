@@ -1,4 +1,4 @@
-﻿namespace Plastic.UnitTests
+﻿namespace Plastic.UnitTests.Internal.Commands
 {
     using FluentAssertions;
     using Xunit;

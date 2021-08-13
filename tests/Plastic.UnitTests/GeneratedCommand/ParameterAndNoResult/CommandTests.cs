@@ -1,4 +1,4 @@
-﻿namespace Plastic.UnitTests.Generator.GeneratedCommand.ParameterAndResult
+﻿namespace Plastic.UnitTests.GeneratedCommand.ParameterAndNoResult
 {
     using System.Collections.Concurrent;
     using System.Linq;
@@ -23,10 +23,9 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult<int> response = sut.ExecuteAsync(param).Result;
+            ExecutionResult response = sut.ExecuteAsync(param).Result;
 
             // Assert
-            response.RequiredValue.Should().Be(param);
             response.HasSucceeded().Should().BeTrue();
         }
 
@@ -52,7 +51,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult<int> response = sut.ExecuteAsync(param).Result;
+            ExecutionResult response = sut.ExecuteAsync(param).Result;
 
             // Assert
             int[] expectedLog = new int[] { 1, 3, 5, -1, 6, 4, 2 };
@@ -80,7 +79,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult<int> response = sut.ExecuteAsync(param).Result;
+            ExecutionResult response = sut.ExecuteAsync(param).Result;
 
             // Assert
             logger.Should().HaveCount(5);
@@ -158,7 +157,7 @@
         }
     }
 
-    public class FakeCommandSpec : CommandSpecificationBase<int, int>
+    public class FakeCommandSpec : CommandSpecificationBase<int>
     {
         private readonly ConcurrentQueue<int>? _logger;
 
@@ -173,10 +172,10 @@
             return CanBeExecutedTask();
         }
 
-        public override Task<ExecutionResult<int>> ExecuteAsync(int param, CancellationToken token = default)
+        public override Task<ExecutionResult> ExecuteAsync(int param, CancellationToken token = default)
         {
             this._logger?.Enqueue(-1);
-            return SuccessTask(param);
+            return SuccessTask();
         }
     }
 }

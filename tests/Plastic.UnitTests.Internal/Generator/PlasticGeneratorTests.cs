@@ -1,4 +1,4 @@
-﻿namespace Plastic.UnitTests.Generator
+﻿namespace Plastic.UnitTests.Internal.Generator
 {
     using System.Collections.Immutable;
     using System.IO;
@@ -12,7 +12,7 @@
 
     public class PlasticGeneratorTests
     {
-        private const string DATA_PREFIX = "Plastic.UnitTests.Generator.TestSet.";
+        private const string DATA_PREFIX = "Plastic.UnitTests.Internal.Generator.TestSet.";
 
         [Fact]
         public void Generator_does_not_generate_a_command_if_CommandSpec_is_abstract_class()

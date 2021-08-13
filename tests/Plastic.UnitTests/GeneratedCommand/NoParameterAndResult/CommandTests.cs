@@ -1,4 +1,4 @@
-﻿namespace Plastic.UnitTests.Generator.GeneratedCommand.ParameterAndNoResult
+﻿namespace Plastic.UnitTests.GeneratedCommand.NoParameterAndResult
 {
     using System.Collections.Concurrent;
     using System.Linq;
@@ -19,13 +19,13 @@
             serviceCollection.UsePlastic();
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
-            int param = 0;
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult response = sut.ExecuteAsync(param).Result;
+            ExecutionResult<int> response = sut.ExecuteAsync(new NoParameters()).Result;
 
             // Assert
+            response.RequiredValue.Should().Be(0);
             response.HasSucceeded().Should().BeTrue();
         }
 
@@ -47,11 +47,10 @@
             serviceCollection.UsePlastic(pipeline);
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
-            int param = 0;
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult response = sut.ExecuteAsync(param).Result;
+            ExecutionResult<int> response = sut.ExecuteAsync(new NoParameters()).Result;
 
             // Assert
             int[] expectedLog = new int[] { 1, 3, 5, -1, 6, 4, 2 };
@@ -75,11 +74,10 @@
             serviceCollection.UsePlastic(pipeline);
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
-            int param = 0;
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult response = sut.ExecuteAsync(param).Result;
+            ExecutionResult<int> response = sut.ExecuteAsync(new()).Result;
 
             // Assert
             logger.Should().HaveCount(5);
@@ -104,11 +102,10 @@
             serviceCollection.UsePlastic(pipelineBuilder);
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
-            int param = 0;
             var sut = new FakeCommand(provider);
 
             // Act
-            sut.ExecuteAsync(param).Wait();
+            sut.ExecuteAsync(new NoParameters()).Wait();
 
             // Assert
 
@@ -118,7 +115,7 @@
 
             pipeline!.Select(q => q.ProvidedContext!.Parameter)
                         .Should()
-                        .AllBeEquivalentTo(param);
+                        .AllBeOfType<NoParameters>();
 
             pipeline!.SelectMany(q => q.ProvidedContext!.Services)
                         .All(q => q == spyService)
@@ -149,7 +146,7 @@
 
             this._mornitor.Enqueue(this._valueToWriteBefore);
 
-            ExecutionResult response = await nextBehavior.Invoke();
+            ExecutionResult response = await nextBehavior.Invoke().ConfigureAwait(false);
 
             this._mornitor.Enqueue(this._valueToWriteAfter);
 
@@ -157,7 +154,7 @@
         }
     }
 
-    public class FakeCommandSpec : CommandSpecificationBase<int>
+    public class FakeCommandSpec : ParameterlessCommandSpecificationBase<int>
     {
         private readonly ConcurrentQueue<int>? _logger;
 
@@ -166,16 +163,16 @@
             this._logger = logger;
         }
 
-        public override Task<Response> CanExecuteAsync(int param, CancellationToken token = default)
+        public override Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default)
         {
             this._logger?.Enqueue(-1);
             return CanBeExecutedTask();
         }
 
-        public override Task<ExecutionResult> ExecuteAsync(int param, CancellationToken token = default)
+        public override Task<ExecutionResult<int>> ExecuteAsync(NoParameters param, CancellationToken token = default)
         {
             this._logger?.Enqueue(-1);
-            return SuccessTask();
+            return SuccessTask(0);
         }
     }
 }

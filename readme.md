@@ -18,18 +18,22 @@ The name of this project is Plastic.
 # Quick Start
 ```cs
 // [CommandName("AddCommand")]
-class AddCommandSpec : CommandSpecificationBase<AddParam, AddResponse>
+class AddCommandSpec : CommandSpecificationBase<int, int>
 {
         public AddCommandSpec(IMyCalculator calculator)
-        { ... }
+        { 
+            ...
+        }
 
-        public override Task<AddResponse> ExecuteAsync(
-                AddParam param, CancellationToken token = default)
-        { ... }
+        public override Task<ExecutionResult<int>> ExecuteAsync(int param, CancellationToken token = default)
+        {
+            ...
+        }
         
-        public override Task<Response> CanExecuteAsync(
-                AddParam param, CancellationToken token = default)
-        { return CanBeExecuted(); }
+        public override Task<Response> CanExecuteAsync(int param, CancellationToken token = default)
+        {
+            return CanBeExecuted();
+        }
 
 }
 // ------
@@ -45,7 +49,7 @@ class AddController : ControllerBase
         public AddController(AddCommand addCommand)
         {
                 ...
-                addCommand.Execute( ... );
+                var result = addCommand.Execute( 1 );
         }
 }
 

@@ -6,7 +6,7 @@ namespace Plastic.Generators
 
     internal static class ServiceCollectionExtensions
     {
-        public static void UsePlastic(this IServiceCollection services, BuildPipeline? pipelineBuilder = default)
+        public static void AddPlastic(this IServiceCollection services, BuildPipeline? pipelineBuilder = default)
         {
             if (pipelineBuilder is not null)
                 services.AddTransient<BuildPipeline>(_ => pipelineBuilder);

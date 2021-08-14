@@ -16,7 +16,7 @@
         {
             // Arrange
             var serviceCollection = new ServiceCollection();
-            serviceCollection.UsePlastic();
+            serviceCollection.AddPlastic();
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
             int param = 0;
@@ -44,7 +44,7 @@
                 new FakePipe(logger, 3, 4),
                 new FakePipe(logger, 5, 6)
             });
-            serviceCollection.UsePlastic(pipeline);
+            serviceCollection.AddPlastic(pipeline);
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
             int param = 0;
@@ -72,7 +72,7 @@
                 new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>()),
                 new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>())
             });
-            serviceCollection.UsePlastic(pipeline);
+            serviceCollection.AddPlastic(pipeline);
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
             int param = 0;
@@ -101,7 +101,7 @@
                 new FakePipe(p.GetRequiredService<ConcurrentQueue<int>>())
             });
 
-            serviceCollection.UsePlastic(pipelineBuilder);
+            serviceCollection.AddPlastic(pipelineBuilder);
             ServiceProvider provider = serviceCollection.BuildServiceProvider();
 
             int param = 0;

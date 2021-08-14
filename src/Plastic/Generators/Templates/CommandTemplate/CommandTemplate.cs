@@ -31,7 +31,7 @@ namespace Plastic.Commands
             {
                 TargetCommandSpec spec = scope.ServiceProvider.GetRequiredService<TargetCommandSpec>();
 
-                response = await spec.CanExecuteAsync(param, token);
+                response = await spec.CanExecuteAsync(param, token).ConfigureAwait(false);
             }
 
             return response;

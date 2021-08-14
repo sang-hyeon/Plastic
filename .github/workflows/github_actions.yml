@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -20,9 +20,8 @@ jobs:
     - name: Build Plastic
       run: dotnet build -c Release
       
-    # test blocks to run,
-    # - name: Test 
-    #   run: dotnet test -c Release --no-build
+    - name: Test 
+      run: dotnet test -c Release --no-build
         
     - name: Publish Package to Nuget.org
       run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NugetApiKey }} --source "nuget.org" --skip-duplicate --no-symbols true

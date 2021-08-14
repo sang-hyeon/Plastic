@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Plastic.Sample.TodoList.Data\Plastic.Sample.TodoList.Data.csproj" />
+    <ProjectReference Include="..\Plastic.Sample.TodoList\Plastic.Sample.TodoList.csproj" />
+  </ItemGroup>
+
+</Project>

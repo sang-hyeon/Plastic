@@ -22,7 +22,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult<int> response = sut.ExecuteAsync(new NoParameters()).Result;
+            ExecutionResult<int> response = sut.ExecuteAsync(default).Result;
 
             // Assert
             response.RequiredValue.Should().Be(0);
@@ -50,7 +50,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult<int> response = sut.ExecuteAsync(new NoParameters()).Result;
+            ExecutionResult<int> response = sut.ExecuteAsync(default).Result;
 
             // Assert
             int[] expectedLog = new int[] { 1, 3, 5, -1, 6, 4, 2 };
@@ -77,7 +77,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            ExecutionResult<int> response = sut.ExecuteAsync(new()).Result;
+            ExecutionResult<int> response = sut.ExecuteAsync(default).Result;
 
             // Assert
             logger.Should().HaveCount(5);
@@ -105,7 +105,7 @@
             var sut = new FakeCommand(provider);
 
             // Act
-            sut.ExecuteAsync(new NoParameters()).Wait();
+            sut.ExecuteAsync(default).Wait();
 
             // Assert
 
@@ -115,7 +115,7 @@
 
             pipeline!.Select(q => q.ProvidedContext!.Parameter)
                         .Should()
-                        .AllBeOfType<NoParameters>();
+                        .AllBeEquivalentTo(default(object?));
 
             pipeline!.SelectMany(q => q.ProvidedContext!.Services)
                         .All(q => q == spyService)
@@ -163,13 +163,13 @@
             this._logger = logger;
         }
 
-        public override Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default)
+        public override Task<Response> CanExecuteAsync(NoParameters? param = default, CancellationToken token = default)
         {
             this._logger?.Enqueue(-1);
             return CanBeExecutedTask();
         }
 
-        public override Task<ExecutionResult<int>> ExecuteAsync(NoParameters param, CancellationToken token = default)
+        public override Task<ExecutionResult<int>> ExecuteAsync(NoParameters? param = default, CancellationToken token = default)
         {
             this._logger?.Enqueue(-1);
             return SuccessTask(0);

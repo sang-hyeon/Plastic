@@ -4,19 +4,19 @@
     using System.Threading.Tasks;
 
     public abstract class ParameterlessCommandSpecificationBase
-        : CanCreateResults, ICommandSpecification<NoParameters, ExecutionResult>
+        : CanCreateResults, ICommandSpecification<NoParameters?, ExecutionResult>
     {
-        public abstract Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default);
+        public abstract Task<Response> CanExecuteAsync(NoParameters? param = default, CancellationToken token = default);
 
-        public abstract Task<ExecutionResult> ExecuteAsync(NoParameters param, CancellationToken token = default);
+        public abstract Task<ExecutionResult> ExecuteAsync(NoParameters? param = default, CancellationToken token = default);
     }
 
     public abstract class ParameterlessCommandSpecificationBase<TResult>
-        : CanCreateResults, ICommandSpecification<NoParameters, ExecutionResult<TResult>>
+        : CanCreateResults, ICommandSpecification<NoParameters?, ExecutionResult<TResult>>
     {
-        public abstract Task<Response> CanExecuteAsync(NoParameters param, CancellationToken token = default);
+        public abstract Task<Response> CanExecuteAsync(NoParameters? param = default, CancellationToken token = default);
 
-        public abstract Task<ExecutionResult<TResult>> ExecuteAsync(NoParameters param, CancellationToken token = default);
+        public abstract Task<ExecutionResult<TResult>> ExecuteAsync(NoParameters? param = default, CancellationToken token = default);
     }
 
     public abstract class CommandSpecificationBase<TParam, TResult>

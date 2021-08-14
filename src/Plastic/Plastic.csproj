@@ -11,7 +11,7 @@
 
   <!--  -->
   <PropertyGroup>
-    <Version>0.3.1</Version>
+    <Version>0.3.2</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>SangHyeon.Kim</Authors>

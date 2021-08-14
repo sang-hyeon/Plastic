@@ -3,6 +3,7 @@
     using Xunit;
     using FluentAssertions;
     using AutoFixture.Xunit2;
+    using System;
 
     public class ExecutionResultTests
     {
@@ -46,6 +47,32 @@
             // Assert
             sut.Result.Should().Be(expectedState.Result);
             sut.Message.Should().Be(expectedState.Message);
+        }
+
+        [Fact]
+        public void RequiredValue_does_return_value_if_value_is_exists()
+        {
+            // Arrange
+            int expectedValue = 1;
+
+            // Act
+            var sut = new ExecutionResult<int>(true, default, expectedValue);
+
+            // Assert
+            sut.RequiredValue.Should().Be(expectedValue);
+        }
+
+        [Fact]
+        public void RequiredValue_does_throw_NullReferenceException_if_value_is_null()
+        {
+            // Arrange
+            var sut = new ExecutionResult<int>(true, default, default);
+
+            // Act
+            Func<int> getRequiredValue = () => sut.RequiredValue;
+
+            // Assert
+            getRequiredValue.Should().Throw<NullReferenceException>();
         }
 
         [Theory]

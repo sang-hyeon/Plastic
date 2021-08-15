@@ -10,6 +10,12 @@
             = new HashSet<TodoItem>
             {
                 new TodoItem(1, "A", "B", true),
+                new TodoItem(2, "A", "B", true),
+                new TodoItem(3, "A", "B", true),
+                new TodoItem(4, "A", "B", true),
+                new TodoItem(5, "A", "B", true),
+                new TodoItem(6, "A", "B", true),
+                new TodoItem(7, "A", "B", true),
             };
 
 

@@ -18,7 +18,7 @@
             return CanBeExecutedTask();
         }
 
-        public override Task<ExecutionResult<TTFFResult>> ExecuteAsync(TTFFParameter param, CancellationToken token = default)
+        protected override Task<ExecutionResult<TTFFResult>> OnExecuteAsync(TTFFParameter param, CancellationToken token = default)
         {
             return SuccessTask(new TTFFResult());
         }

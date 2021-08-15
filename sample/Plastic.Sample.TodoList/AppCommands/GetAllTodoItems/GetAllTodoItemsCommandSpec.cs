@@ -21,7 +21,7 @@
             return CanBeExecutedTask();
         }
 
-        public override Task<ExecutionResult<TodoItemDto[]>> ExecuteAsync(
+        protected override Task<ExecutionResult<TodoItemDto[]>> OnExecuteAsync(
             NoParameters? _ = default, CancellationToken token = default)
         {
             IEnumerable<TodoItem> items = this._todoRepo.GetAll();

@@ -11,5 +11,15 @@
             this.Result = result;
             this.Message = message;
         }
+
+        public static implicit operator bool(Response response)
+        {
+            return response.Result;
+        }
+
+        public bool ToBoolean()
+        {
+            return this.Result;
+        }
     }
 }

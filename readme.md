@@ -4,6 +4,12 @@
 
 [한국어](https://github.com/sang-hyeon/Plastic/tree/main/docs/kor)
 
+<br>
+
+![Platstic의 명령 흐름](docs/resources/flow.jpg)
+
+<br>
+
 # Abstract
 This project provides encapsulation of things like Domain, Application Rules, Business Rules or Business Logic in Application. For this, Command pattern is used.
 
@@ -65,7 +71,4 @@ class AddController : ControllerBase
 ```
 
 <br>
-
-# Flow of Plastic
-![Platstic의 명령 흐름](docs/resources/flow.jpg)
 

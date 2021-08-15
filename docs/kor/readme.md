@@ -12,7 +12,10 @@ Source Generator와 같은 메타프로그래밍을 적절히 활용한다면 �
 
 이 프로젝트의 이름은 Plastic 입니다.
 
+<br>
+
 # Quick Start
+Step 1. 커맨드 작성합니다.
 ```cs
 // [CommandName("AddCommand")]
 class AddCommandSpec : CommandSpecificationBase<AddParam, AddResponse>
@@ -27,8 +30,11 @@ class AddCommandSpec : CommandSpecificationBase<AddParam, AddResponse>
         public override Task<Response> CanExecuteAsync(
                 AddParam param, CancellationToken token = default)
         { return CanBeExecuted(); }
-
 }
+```
+
+Step 2. IServiceCollection에 Plastic을 추가합니다.
+```cs
 // ------
 void Configure(IServiceCollection services)
 {
@@ -36,106 +42,137 @@ void Configure(IServiceCollection services)
 
         services.UsePlastic(pipelineBuilder);
 }
+```
+Step 3. 생성자 주입을 통해 사용합니다.
+```cs
 // ------
 class AddController : ControllerBase
 {
         public AddController(AddCommand addCommand)
         {
                 ...
-                addCommand.Execute( ... );
+                var result = addCommand.Execute( ... );
         }
 }
-
 ```
-
-
-# Architecture
-Plastic은 흔히 알려진 몇가지 주요 개념들을 중점으로 디자인되었습니다.
-
-* 명령 패턴 (Commad Pattern)
-* 비상태 저장 (Stateless)
-* 파이프라인 (Pipeline)
-* 장기 실행 서비스 (Long-running Service)
-* 안전성 (Safety)
-* 강한 결합 (Coupling)
-* 명시적 종속성 (Explicit dependencies)
 
 <br>
 
+# 명령의 흐름
 아래는 명령의 흐름을 설명합니다.
-![Platstic의 명령 흐름](resources/command-flow.jpg)
+![Platstic의 명령 흐름](../resources/flow.jpg)
 
-## 명령 패턴 (Command Pattern)
-Command Pattern은 개체 자체가 명령이라는 단순한 디자인 패턴입니다.
+<br>
 
-일반적으로 Application은 사용자로부터 명령을 받고 그것을 처리합니다.
-때문에 이러한 Application의 Usecase는 Command Pattern으로 표현하기에 매우 적절합니다.
+# Command
+Application들은 일반적으로 사용자로부터 명령을 받아 그것을 처리합니다.
+이것은 때때로 Usecase라고 불리우고 있습니다.
 
-Plastic에서 이 Command들은 사용자가 직접적으로 다룰 수 있게 제일 앞단에 배치됩니다.
-구현에서는 아래와 같은 소스코드가 이를 담당합니다.
+Command pattern은 개체가 명령 그 자체라는 매우 단순한 Design pattern입니다.
+Usecase들은 Application의 명령을 다루기에, 이 Command pattern으로 표현하기에 적절합니다.
 
+Plastic은 이러한 Command들을 작성할 수 있도록 지원합니다. 또한 .Net의 Source Generator를 활용하여 보다 유연한 소스 코드를 제공합니다. 이를 통해 보다 더 나은 사용성을 기대할 수 있습니다.
+
+아래는 Plastic에서 Command 작성을 위한 최상위 추상화입니다.
 ```cs
 public interface ICommandSpecification<in TParam, TResult>
-        where TParam : CommandParameters
-        where TResult : ExecutionResult
 {
-   Task<TResult> ExecuteAsync(TParam param, CancellationToken token = default);
-   
-   Task<Response> CanExecuteAsync(TParam param, CancellationToken token = default);
+    Task<TResult> ExecuteAsync(TParam param, CancellationToken token = default);
+    Task<Response> CanExecuteAsync(TParam param, CancellationToken token = default);
 }
 ```
 
-Plastic은 명세된 `ICommandSpecification<,>` 의 구현체를 바탕으로 사용가능한 Command를 생성합니다.
-> 생성된 Command에는 Pipeline을 연결하는 코드들이 포함됩니다.
+Plastic은 해당 추상화의 구현체를 바탕으로 사용가능한 Command를 생성합니다.
+> 생성된 Command에는 전역 파이프라인이 포함된 Souce code가 구성됩니다.
+> 전역 파이프라인에 대한 상세한 내용은 이후 이어지는 내용에서 다루도록 합니다.
 
-그러나 이 Interface는 최상위 추상체이며 이를 바탕으로 구현하는것은 불가능 할 것입니다.
-작성자는 아래와 같은 추상체를 사용해야 합니다.
+그러나 Plastic에서 위와 같은 추상체를 직접적으로 사용할 수 없습니다.
 
-또한 명령의 다양한 시나리오를 지원합니다. <br>
-
+구현체는 아래와 같은 몇가지 Base class들을 통해 가능합니다.
 ```cs
-    public abstract class CommandSpecificationBase<TParam, TResult>
-    { ... }
+public abstract class ParameterlessCommandSpecificationBase
+        : ICommandSpecification<NoParameters?, ExecutionResult> { }
 
-    public abstract class CommandSpecificationBase<TResult>
-    { ... }
+public abstract class ParameterlessCommandSpecificationBase<TResult>
+        : ICommandSpecification<NoParameters?, ExecutionResult<TResult>> { }
 
-    public abstract class CommandSpecificationBase
-    { ... }
+public abstract class CommandSpecificationBase<TParam, TResult>
+        : ICommandSpecification<TParam, ExecutionResult<TResult>> { }
+        
+public abstract class CommandSpecificationBase<TParam>
+        : ICommandSpecification<TParam, ExecutionResult> { }
 ```
+이러한 Base class들을 통해 다양한 시나리오의 Command를 작성할 수 있습니다.
 
+또한 Base class들에서 사용된 몇가지 개체들은 아래와 같습니다.
+* NoParameter <br>
+파라메터 없음을 나타냅니다. 파라메터가 없는 Command들을 위해 사용됩니다.
 
-## 비상태 저장 (Stateless)
-모든 Command들은 Stateful 을 지원하지 않습니다. <br>
-일회성으로 수행되는 Command가 상태를 저장하는건 Business Transaction을 보장하는것에 유용하지 못합니다.
+* Response <br>
+일반적으로 CanExecuteAsync의 반환 타입입니다. 가능 여부를 위한 boolean과 message 속성을 포함합니다.
 
-즉 흔히 Web에서 볼 수 있는 Seesion과 같은 도구를 지원하지 않으며 장려하지 않습니다.
+* ExecutionResult <br>
+ExecuteAsync의 반환 타입으로써 실행 성공 여부를 나타냅니다.
 
-## 파이프라인 (Pipeline)
-모든 Command들은 특정한 전역 파이프라인 (Global Pipeline)을 거친 후 실행됩니다. <br>
+* ExecutionResult&#60;T&#62; <br>
+ExecutionResult와 같은 용도지만 결과 값을 포함할 수 있습니다. 실행에 실패하면 이 결과 값은 null입니다.
+
+이러한 Base Class들을 상속받고 지정된 abstract method들을 작성합니다.
+> 상속된 class의 이름에 접미사로 'CommandSpec'을 사용해주세요. Plastic은 그를 인지하여 알맞는 이름으로 Command를 생성합니다. 또는 `CommandNameAttribute`을 통해 생성될 Command의 이름을 지정할 수 있습니다.
+
+이후 Compile하면 명세를 바탕으로 모든 Command들이 자동 생성됩니다.
+
+> `ExecuteAsync`는 내부에서 `CanExecuteAsync`를 호출하여 실행이 가능할때 실행됩니다.
+
+<br>
+
+# 파이프라인 (Pipeline)
+모든 Command들은 특정한 `전역 파이프라인 (Global Pipeline)`을 거친 후 실행됩니다. <br>
 이 파이프라인을 구성함으로써 보다 나은 기능성을 기대할 수 있습니다.
 
 Logging, Business transaction, Integration event와 같은 시나리오들을 이 파이프라인에서 프로세싱할 수 있습니다.
 
-## 장기 실행 서비스 (Long-running Service)
-몇몇 Application들은 특정 Domain 개체의 상태를 변경하는것으로 끝나지 않을 수 있습니다.
+`abstract class Pipe`를 상속받아 한개의 Pipe를 작성할 수 있습니다.
 
-특히 Mobile이나 Desktop Application들이 그렇습니다.
+아래는 Sample에서 사용되어진 Pipe 구현의 예입니다.
+```cs
+public class LoggingPipe : Pipe
+{
+        ...
+        public async override Task<ExecutionResult> Handle(
+                PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token)
+        {
+                this._logger.LogInformation(context.Parameter?.ToString());
 
-또한 Machine learning을 활용하는 Application에서도 볼 수 있습니다. <br>
-Machine learning의 학습 과정은 Long-running 입니다.
+                ExecutionResult result = await nextBehavior.Invoke().ConfigureAwait(false);
 
-## 안전성 (Safety)
-Platsic은 매우 높은 자유도를 제공하지 않습니다. <br>
-계획된 컨셉에 어긋나는 코드는 오히려 시스템에 악영향을 미칠 수 있습니다.
+                this._logger.LogInformation(result.ToString());
 
-예로 Command에서는 다른 Command들을 사용할 수 없습니다.
-물론 몇몇은 이미 작성한 Command를 재사용하고 싶을 것입니다.
-하지만 대개 이런 경우는 Layer를 더 복잡하게 만듭니다.
+                return result;
+        }
+}
+```
+이렇게 작성된 Pipe들은 `AddPlastic(PipelineBuilder builder)`를 통해 주입할 수 있습니다.
 
-Command들 안에서 중복 코드가 발생할 수 있습니다. 허나 Plastic은 그것을 거짓 중복으로 취급합니다.
+> Pipeline은 `Asp.net`의 pipeline 실행 흐름과 동일합니다. 또한, 이에 영감 받은 `MediatR`과도 동일합니다.
 
-## 강한 결합 (Coupling)
+
+Pieline에서 주목해야할 점은 `PipelineContext`에 있습니다.
+이 Context에는 Pipe에서 사용할 수 있는 모든 데이터가 준비되어 있습니다.
+
+* Parameter <br>
+Command에서 사용될 Parameter 인스턴스입니다.
+
+* CommandSpec <br>
+실행 될 CommandSpec Type입니다.
+
+* Services <br>
+실행 될 CommandSpec이 생성자 주입으로 필요로 하는 Service들의 Instance들입니다.
+이 Instance는 실제로 CommandSpec의 생성자로 주입됩니다.
+
+<br>
+
+# 강한 결합 (Coupling)
 Command들은 모두 구현체 그대로 노출 됩니다. <br>
 테스트, 다른 구현체 사용 등등 과 같은 명목으로 적용되는 낮은 결합(Low Coupling)은 Plastic에서 배제됩니다.
  
@@ -147,7 +184,9 @@ Domain Service를 구축하는 사례를 보면 대개 추상화를 통한 낮�
 
 Plastic은 바깥 Layer가 명령의 변경사항에 민감하게 반응하기를 희망합니다.
 
-## 명시적 종속성 
+<br>
+
+# 명시적 종속성 
 다양하게 수많은 Command들을 손쉽게 다루기 위한 방법으로 Mediator 혹은 Service Locator와 같은 방법을 생각해낼 수 있습니다.
 그러나 이는 개체의 명시적 종속을 위반합니다.
 
@@ -157,10 +196,13 @@ Plastic은 바깥 Layer가 명령의 변경사항에 민감하게 반응하기�
 이를 위해 .Net 5에서 소개된 Source Generator 를 활용합니다.
 이를 통해 사용성과 명시적 종속성, 이 두가지를 모두 제공합니다.
 
+<br>
+
 # 이름에 대하여...
 일상 생활에서 Plastic은 대부분 무언가를 보호하기 위해 사용되는 깨지기 쉬운 재질입니다.
 프로젝트 Plastic은 소비측의 안쪽 Layer를 보호하기 위해 만들어졌기에 이렇게 작명되었습니다.
 
+<br>
 
 # 마치며
 이 프로젝트는 아주 새로운 것이 아닙니다.

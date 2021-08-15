@@ -2,6 +2,8 @@
 [![Build Main](https://github.com/sang-hyeon/Plastic/actions/workflows/github_actions.yml/badge.svg?branch=main)](https://github.com/sang-hyeon/Plastic/actions/workflows/github_actions.yml)
 [![Nuget](https://img.shields.io/nuget/v/Plastic)](https://www.nuget.org/packages/Plastic/)
 
+[한국어](https://github.com/sang-hyeon/Plastic/tree/main/docs/kor)
+
 # Abstract
 This project provides encapsulation of things like Domain, Application Rules, Business Rules or Business Logic in Application. For this, Command pattern is used.
 
@@ -16,6 +18,8 @@ The name of this project is Plastic.
 <br>
 
 # Quick Start
+
+Step 1. Specify The Command
 ```cs
 // [CommandName("AddCommand")]
 class AddCommandSpec : CommandSpecificationBase<int, int>
@@ -36,14 +40,20 @@ class AddCommandSpec : CommandSpecificationBase<int, int>
         }
 
 }
-// ------
+```
+
+Step 2. Add Plastic to IServiceCollection
+```cs
 void Configure(IServiceCollection services)
 {
         var pipelineBuilder = new BuildPipeline(...);
 
         services.UsePlastic(pipelineBuilder);
 }
-// ------
+```
+
+Step 3. Use Generated Command
+```cs
 class AddController : ControllerBase
 {
         public AddController(AddCommand addCommand)
@@ -52,10 +62,10 @@ class AddController : ControllerBase
                 var result = addCommand.Execute( 1 );
         }
 }
-
 ```
 
 <br>
 
 # Flow of Plastic
-![Platstic의 명령 흐름](resources/command-flow.jpg)
+![Platstic의 명령 흐름](docs/resources/flow.jpg)
+

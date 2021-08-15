@@ -27,10 +27,10 @@
             }
             else
             {
-                return typeof(TResult) == typeof(ExecutionResult)
-                                ? (TResult)Failure(canExecute.Message)
-                                : (TResult)(ExecutionResult)Failure<TResult>(canExecute.Message);
+                return CreateFailure(canExecute.Message);
             }
         }
+
+        protected abstract TResult CreateFailure(string? message);
     }
 }

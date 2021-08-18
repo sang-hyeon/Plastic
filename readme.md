@@ -6,10 +6,6 @@
 
 <br>
 
-![Platstic의 명령 흐름](docs/resources/flow.jpg)
-
-<br>
-
 # Abstract
 This project provides encapsulation of things like Domain, Application Rules, Business Rules or Business Logic in Application. For this, Command pattern is used.
 
@@ -20,6 +16,11 @@ The source generator introduced in .Net 5 is used to implement this Idea. If met
 Generated source code has the same effect as the source code you wrote yourself because it will be injected at compile time.
 
 The name of this project is Plastic.
+
+<br>
+
+# Flow of the command
+![Platstic의 명령 흐름](docs/resources/flow.jpg)
 
 <br>
 
@@ -58,7 +59,7 @@ void Configure(IServiceCollection services)
 }
 ```
 
-Step 3. Use Generated Command
+Step 3. Use a generated command
 ```cs
 class AddController : ControllerBase
 {
@@ -69,6 +70,3 @@ class AddController : ControllerBase
         }
 }
 ```
-
-<br>
-

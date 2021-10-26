@@ -3,7 +3,7 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public abstract class Pipe : CanCreateResults
+    public abstract class Pipe
     {
         public Pipe()
         {

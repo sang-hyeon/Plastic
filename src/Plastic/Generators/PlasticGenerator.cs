@@ -58,18 +58,19 @@
                     userCommandSpecSymbol.AllInterfaces.First(q => q.ConstructedFrom == originalInterface);
 
                 ITypeSymbol paramSymbol = commandSpecInterface.TypeArguments[0];
-                ITypeSymbol responseSymbol = commandSpecInterface.TypeArguments[1];
+                ITypeSymbol executionResultSymbol = commandSpecInterface.TypeArguments[1];
 
                 string codeForServicesToBeProvided = BuildServiceInjectionCodeForPipelineContext(userCommandSpecSymbol);
                 string @namespace = userCommandSpecSymbol.ContainingNamespace.ToString();
 
                 var commandBuilder = new StringBuilder(commandTemplate);
                 commandBuilder.Replace("{{ Namespace }}", @namespace);
-                commandBuilder.Replace("Plastic.ExecutionResult<Plastic.TTFFResult>", responseSymbol.ToString());
+                commandBuilder.Replace("Plastic.ExecutionResult<Plastic.TTFFResult>", executionResultSymbol.ToString());
                 commandBuilder.Replace("Plastic.TTFFCommandSpec", userCommandSpecSymbol.ToString());
                 commandBuilder.Replace("TargetParameter", paramSymbol.ToString());
                 commandBuilder.Replace("TTFFCommand", commandNameGenerated);
                 commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
+                ReplacingForPipelineContext(commandBuilder, executionResultSymbol);
 
                 contextToAdd.AddSource($"{userCommandSpecSymbol}_{commandNameGenerated}.cs", commandBuilder.ToString());
 
@@ -77,6 +78,21 @@
             }
             else
                 return default;
+        }
+
+        private static void ReplacingForPipelineContext(StringBuilder commandBuilder, ITypeSymbol executionResultSymbol)
+        {
+            var executionResultNamedSymbol = (INamedTypeSymbol)executionResultSymbol;
+
+            if (executionResultNamedSymbol.TypeArguments.Length == 1)
+            {
+                string resultTypeFullName = executionResultNamedSymbol.TypeArguments[0].ToString();
+                commandBuilder.Replace("PipelineContext<Plastic.TTFFResult>", $"PipelineContext<{resultTypeFullName}>");
+            }
+            else
+            {
+                commandBuilder.Replace("PipelineContext<Plastic.TTFFResult>", "PipelineContext");
+            }
         }
 
         private static string GenerateCommandName(INamedTypeSymbol userCommandSpecSymbol)

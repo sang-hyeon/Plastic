@@ -66,7 +66,7 @@ namespace Plastic.Commands
 
             object[] servicesFound = services.OfType<object>().ToArray();
 
-            return new PipelineContext(param, typeof(TargetCommandSpec), servicesFound);
+            return new PipelineContext<Plastic.TTFFResult>(param, typeof(TargetCommandSpec), servicesFound);
         }
 
         private static Behavior<ExecutionResult> CreateCommandAsBehavior(

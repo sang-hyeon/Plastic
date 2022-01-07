@@ -22,7 +22,7 @@
                             <Run Text="{Binding Title, Mode=OneWay}" />
                             <Run Text="     " />
                         </TextBlock>
-                        <CheckBox IsChecked="{Binding Done, Mode=OneWay}" IsEnabled="False" />
+                        <CheckBox IsChecked="{Binding Done, Mode=TwoWay}"/>
                     </StackPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

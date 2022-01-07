@@ -1,4 +1,4 @@
-﻿namespace Plastic.Sample.TodoList.AppCommands.GetAllTodoItems
+﻿namespace Plastic.Sample.TodoList.AppCommands.Dto
 {
     public record TodoItemDto
     {

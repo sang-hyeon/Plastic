@@ -1,9 +1,10 @@
-﻿namespace Plastic.Sample.TodoList.AppCommands.GetAllTodoItems
+﻿namespace Plastic.Sample.TodoList.AppCommands
 {
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Plastic.Sample.TodoList.AppCommands.Dto;
     using Plastic.Sample.TodoList.Domain;
     using Plastic.Sample.TodoList.ServiceAgents;
 
@@ -36,7 +37,7 @@
             {
                 Id = item.Id,
                 Title = item.Title,
-                Done = item.Done
+                Done = item.IsDone
             };
         }
     }

@@ -5,39 +5,40 @@
     using System.Windows;
     using GalaSoft.MvvmLight.Views;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using Plastic.Sample.TodoList.Client.Desktop.Commands;
     using Plastic.Sample.TodoList.Client.Desktop.Services;
     using Plastic.Sample.TodoList.Client.Desktop.ViewModels;
-    using Plastic.Sample.TodoList.Data;
-    using Plastic.Sample.TodoList.Pipeline;
-    using Plastic.Sample.TodoList.ServiceAgents;
 
     [SuppressMessage("Performance", "CA1810:참조 형식 정적 필드 인라인을 초기화하세요.", Justification = "sample")]
     public partial class App : Application
     {
-        public readonly static IServiceProvider Provider = default!;
+        private readonly static IHost _apphost = default!;
+
+        public static IServiceProvider Provider => _apphost.Services;
 
         static App()
         {
             // HACK: just sample, don't use like this...
 
-            var services = new ServiceCollection();
+            IHostBuilder host = new HostBuilder()
+                                                .ConfigureServices(services =>
+                                                {
+                                                    services.AddTransient<TodoListViewModels>();
+                                                    services.AddTransient<IDialogService, DialogService>();
+                                                    services.AddTransient<RefreshAllTodosVCommand>();
 
-            BuildPipeline pipeline = p =>
-            {
-                return new Pipe[]
-                {
-                    new LoggingPipe(p.GetRequiredService<ILogger<LoggingPipe>>())
-                };
-            };
-            services.AddSingleton<ITodoItemRepository, TodoItemRepository>();
-            services.AddTransient<TodoListViewModels>();
-            services.AddTransient<IDialogService, DialogService>();
-            services.AddTransient<RefreshAllTodosVCommand>();
-            services.AddPlastic();
+                                                    Plastic.Sample.TodoList.Initializer.Init(services);
+                                                    Plastic.Sample.TodoList.Data.Initializer.Init(services);
+                                                })
+                                                .ConfigureLogging(logging =>
+                                                {
+                                                    logging.AddConsole();
+                                                    logging.AddDebug();
+                                                });
 
-            Provider = services.BuildServiceProvider();
+            _apphost = host.Build();
         }
 
         public App()

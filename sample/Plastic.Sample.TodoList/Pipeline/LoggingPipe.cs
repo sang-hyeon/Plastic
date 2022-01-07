@@ -16,11 +16,12 @@
         public async override Task<ExecutionResult> Handle(
             PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token)
         {
-            this._logger.LogInformation(context.Parameter?.ToString());
+            this._logger.LogInformation($"Execute Command - {context.CommandSpec.Name}");
+            this._logger.LogInformation($"Parameter - {context.Parameter?.ToString()}");
 
             ExecutionResult result = await nextBehavior.Invoke().ConfigureAwait(false);
 
-            this._logger.LogInformation(result.ToString());
+            this._logger.LogInformation($"Result - {result}");
 
             return result;
         }

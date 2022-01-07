@@ -1,14 +1,16 @@
 ﻿namespace Plastic.Sample.TodoList.ServiceAgents
 {
     using System.Collections.Generic;
+    using System.Threading;
+    using System.Threading.Tasks;
     using Plastic.Sample.TodoList.Domain;
 
-    public interface ITodoItemRepository
+    internal interface ITodoItemRepository
     {
-        public void Add(TodoItem item);
-
-        public void Update(TodoItem item);
+        public void Add(string title, string? note);
 
         public IEnumerable<TodoItem> GetAll();
+
+        public Task SaveChangesAsync(CancellationToken token = default);
     }
 }

@@ -4,18 +4,24 @@
     using System.Collections.Generic;
     using System.Windows.Input;
     using Plastic.Sample.TodoList.Client.Desktop.ViewModels;
-    using Plastic.Sample.TodoList.AppCommands.GetAllTodoItems;
     using GalaSoft.MvvmLight.Views;
+    using Plastic.Sample.TodoList.AppCommands.Dto;
+    using Plastic.Sample.TodoList.AppCommands;
 
     public class RefreshAllTodosVCommand : ICommand
     {
         private readonly GetAllTodoItemsCommand _command;
+        private readonly DoneCommand _doneCommand;
         private readonly IDialogService _dialogService;
         private ICollection<TodoViewModel>? _currentParameter;
 
-        public RefreshAllTodosVCommand(GetAllTodoItemsCommand command, IDialogService dialogService)
+        public RefreshAllTodosVCommand(
+            GetAllTodoItemsCommand command,
+            DoneCommand doneCommand,
+            IDialogService dialogService)
         {
             this._command = command;
+            this._doneCommand = doneCommand;
             this._dialogService = dialogService;
         }
 
@@ -56,13 +62,13 @@
             this.CanExecuteChanged?.Invoke(this, new EventArgs());
         }
 
-        private static void RefreshAll(ICollection<TodoViewModel> targetCollection, IEnumerable<TodoItemDto> dto)
+        private void RefreshAll(ICollection<TodoViewModel> targetCollection, IEnumerable<TodoItemDto> dto)
         {
             targetCollection.Clear();
 
             foreach (TodoItemDto todoDto in dto)
             {
-                var todoItem = new TodoViewModel(todoDto.Title, todoDto.Done);
+                var todoItem = new TodoViewModel(todoDto.Id, todoDto.Title, todoDto.Done, this._doneCommand);
                 targetCollection.Add(todoItem);
             }
         }

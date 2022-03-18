@@ -31,6 +31,11 @@
             Items.Add(newTodo);
         }
 
+        public bool Exists(int id)
+        {
+            return Items.Any(q => q.Id == id);
+        }
+
         public IEnumerable<TodoItem> GetAll()
         {
             return Items;

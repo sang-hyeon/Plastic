@@ -17,7 +17,7 @@
 
         public override Task<Response> CanExecuteAsync(int todoItemId, CancellationToken token = default)
         {
-            bool exists = this._todoItemRepository.GetAll().Any(q => q.Id == todoItemId);
+            bool exists = this._todoItemRepository.Exists(todoItemId);
 
             if (exists)
                 return CanBeExecutedTask();

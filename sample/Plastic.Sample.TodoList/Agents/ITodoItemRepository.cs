@@ -11,6 +11,8 @@
 
         public IEnumerable<TodoItem> GetAll();
 
+        public bool Exists(int id);
+
         public Task SaveChangesAsync(CancellationToken token = default);
     }
 }

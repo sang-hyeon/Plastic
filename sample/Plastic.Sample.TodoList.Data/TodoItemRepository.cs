@@ -1,12 +1,14 @@
 ﻿namespace Plastic.Sample.TodoList.Data
 {
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Plastic.Sample.TodoList.Domain;
     using Plastic.Sample.TodoList.ServiceAgents;
 
+    [SuppressMessage("", "CA1812", Justification = "타입으로써 사용합니다.")]
     internal class TodoItemRepository : ITodoItemRepository
     {
         protected static readonly HashSet<TodoItem> Items

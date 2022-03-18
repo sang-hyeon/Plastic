@@ -5,8 +5,9 @@
 
     public class TodoViewModel : ViewModelBase
     {
-        private readonly int _id;
         private readonly DoneCommand _doneCommand;
+        private readonly TodoAgainCommand _todoAgaineCommand;
+        private readonly int _id;
         private bool _done;
 
         public string Title { get; }
@@ -19,24 +20,32 @@
 
         public TodoViewModel(
             int id, string title, bool done,
-            DoneCommand doneCommand)
+            DoneCommand doneCommand,
+            TodoAgainCommand todoAgaineCommand)
         {
             this._id = id;
             this.Title = title;
             this._done = done;
             this._doneCommand = doneCommand;
+            this._todoAgaineCommand = todoAgaineCommand;
         }
 
-        protected bool SetDone(bool newValue)
+        protected bool SetDone(bool newState)
         {
-            if (this._done == false)
+            // HACK: It's sample, Don't use like this...
+            bool executed;
+            if (newState)
             {
-                var result = this._doneCommand.ExecuteAsync(this._id).Result;
-                if (result.HasSucceeded())
-                    return Set(ref this._done, true);
+                ExecutionResult result = this._doneCommand.ExecuteAsync(this._id).Result;
+                executed = result.HasSucceeded();
+            }
+            else
+            {
+                ExecutionResult result = this._todoAgaineCommand.ExecuteAsync(this._id).Result;
+                executed = result.HasSucceeded();
             }
 
-            return false;
+            return executed ? Set(ref this._done, newState) : false;
         }
     }
 }

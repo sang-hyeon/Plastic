@@ -23,6 +23,11 @@
             this.IsDone = true;
         }
 
+        public void TodoAgain()
+        {
+            this.IsDone= false;
+        }
+
         public static TodoItem NewTodo(int id, string title, string? note = default)
         {
             return new TodoItem(id, title, note, false);

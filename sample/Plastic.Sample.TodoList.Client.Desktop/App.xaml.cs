@@ -7,7 +7,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
-    using Plastic.Sample.TodoList.Client.Desktop.Commands;
     using Plastic.Sample.TodoList.Client.Desktop.Services;
     using Plastic.Sample.TodoList.Client.Desktop.ViewModels;
 
@@ -20,14 +19,12 @@
 
         static App()
         {
-            // HACK: just sample, don't use like this...
-
+            // HACK: It's sample, Don't use like this...
             IHostBuilder host = new HostBuilder()
                                                 .ConfigureServices(services =>
                                                 {
                                                     services.AddTransient<TodoListViewModels>();
                                                     services.AddTransient<IDialogService, DialogService>();
-                                                    services.AddTransient<RefreshAllTodosVCommand>();
 
                                                     Plastic.Sample.TodoList.Initializer.Init(services);
                                                     Plastic.Sample.TodoList.Data.Initializer.Init(services);

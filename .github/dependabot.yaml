@@ -1,6 +1,16 @@
 version: 2
 updates:
   - package-ecosystem: "nuget"
-    directory: "projects"
+    directory: "projects/Plastic/Plastic/"
+    schedule:
+      interval: "weekly"
+      
+  - package-ecosystem: "nuget"
+    directory: "projects/Plastic/Plastic.UnitTests/"
+    schedule:
+      interval: "weekly"
+      
+  - package-ecosystem: "nuget"
+    directory: "projects/Plastic/Plastic.UnitTests.Internal/"
     schedule:
       interval: "weekly"

@@ -1,4 +1,4 @@
-name: Build Main
+name: Checks pull-request
 
 on:
   pull_request:

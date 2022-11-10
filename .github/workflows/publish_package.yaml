@@ -1,0 +1,31 @@
+name: Build Main
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.x
+        
+    - name: Build Plastic
+      run: dotnet build projects/Plastic/Plastic/Plastic.csproj -c Release
+      
+    - name: Test 
+      run: dotnet test projects/Plastic/Plastic.UnitTests/Plastic.UnitTests.csproj -c Release
+
+    - name: Test (internal)
+      run: dotnet test projects/Plastic/Plastic.UnitTests.Internal/Plastic.UnitTests.Internal.csproj -c Release
+        
+    - name: Publish Package to Nuget.org
+      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NugetApiKey }} --source "nuget.org" --skip-duplicate --no-symbols

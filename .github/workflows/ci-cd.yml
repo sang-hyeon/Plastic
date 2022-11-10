@@ -1,4 +1,4 @@
-name: Build Main
+name: Build Source Code
 
 on:
   push:
@@ -8,9 +8,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     
@@ -27,6 +25,3 @@ jobs:
 
     - name: Test (internal)
       run: dotnet test projects/Plastic/Plastic.UnitTests.Internal/Plastic.UnitTests.Internal.csproj -c Release
-        
-    - name: Publish Package to Nuget.org
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NugetApiKey }} --source "nuget.org" --skip-duplicate --no-symbols

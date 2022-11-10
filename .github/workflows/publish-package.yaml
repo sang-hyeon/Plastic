@@ -1,4 +1,4 @@
-name: Build Main
+name: Publish Package
 
 on:
   release:

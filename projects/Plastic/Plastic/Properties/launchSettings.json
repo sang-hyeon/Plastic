@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "Plastic": {
-      "commandName": "DebugRoslynComponent",
-      "targetProject": "..\\..\\tests\\Plastic.UnitTests\\Plastic.UnitTests.csproj"
-    }
-  }
-}

@@ -15,7 +15,7 @@ namespace PlasticCommand
 
         private static void AddGeneratedCommands(IServiceCollection services)
         {
-            services.AddTransient(typeof(TTFFCommand)); // replace: on template
+            services.AddTransient(typeof(Templates.TTFFCommand)); // replace: on template
         }
     }
 }

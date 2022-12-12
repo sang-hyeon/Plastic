@@ -1,13 +1,15 @@
 ﻿#pragma warning disable
 #nullable enable
-namespace PlasticCommand // replace: to {{ Namespace }}
+namespace Templates // replace: to {{ Namespace }}
 {
     using Microsoft.Extensions.DependencyInjection;
+    using PlasticCommand;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using Generator = PlasticCommand.Generator;
     using TargetCommandSpec = PlasticCommand.Generator.TTFFCommandSpec;
 
     // replace: internal to public

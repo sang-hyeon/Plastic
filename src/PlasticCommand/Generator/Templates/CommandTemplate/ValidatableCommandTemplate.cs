@@ -8,16 +8,24 @@ namespace PlasticCommand // replace: to {{ Namespace }}
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
-    using TargetCommandSpec = PlasticCommand.Generator.TTFFCommandSpec;
+    using TargetCommandSpec = PlasticCommand.Generator.TTFFValidatableCommandSpec;
 
     // replace: internal to public
-    internal class TTFFCommand : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
+    internal class TTFFValidatableCommand
+        : ICommandSpecificationWithValidation<Generator.TTFFParameter, Generator.TTFFResult, Generator.TTFFValidationResult>
     {
         private readonly IServiceProvider _provider;
 
-        public TTFFCommand(IServiceProvider provider)
+        public TTFFValidatableCommand(IServiceProvider provider)
         {
             this._provider = provider;
+        }
+
+        public Task<Generator.TTFFValidationResult> CanExecuteAsync(
+            Generator.TTFFParameter param, CancellationToken token = default)
+        {
+            var command = this._provider.GetRequiredService<TargetCommandSpec>();
+            return command.CanExecuteAsync(param, token);
         }
 
         public async Task<Generator.TTFFResult> ExecuteAsync(
@@ -46,7 +54,7 @@ namespace PlasticCommand // replace: to {{ Namespace }}
         {
             object?[] services = new object?[]
             {
-                provider.GetService<IServiceProvider>() // replace: on template
+                provider.GetService<IServiceProvider>() // replace: to {{ ServicesToBeProvided }}
             };
 
             object[] servicesFound = services.OfType<object>().ToArray();

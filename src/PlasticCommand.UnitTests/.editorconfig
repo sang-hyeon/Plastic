@@ -2,3 +2,6 @@
 
 # IDE1006: Naming Styles
 dotnet_diagnostic.IDE1006.severity = none
+
+# IDE0039: Use local function
+dotnet_diagnostic.IDE0039.severity = none

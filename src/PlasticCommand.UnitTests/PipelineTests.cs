@@ -1,11 +1,11 @@
 ﻿
+using FluentAssertions;
+using Microsoft.Extensions.DependencyInjection;
+using PlasticCommand.UnitTests.TestCommands;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
-using Microsoft.Extensions.DependencyInjection;
-using PlasticCommand.UnitTests.TestCommands;
 using Xunit;
 
 namespace PlasticCommand.UnitTests;
@@ -28,7 +28,7 @@ public class PipelineTests
         };
 
         var services = new ServiceCollection();
-        services.AddScoped<Queue<int>>(_ => logger);
+        services.AddScoped(_ => logger);
         services.AddScoped<HashSet<int>>();
         services.AddPlastic(pipelineBuilder);
         IServiceProvider provider = services.BuildServiceProvider();
@@ -57,7 +57,7 @@ public class PipelineTests
         };
 
         var services = new ServiceCollection();
-        services.AddScoped<Queue<int>>(_ => logger);
+        services.AddScoped(_ => logger);
         services.AddScoped<HashSet<int>>();
         services.AddPlastic(pipelineBuilder);
         IServiceProvider provider = services.BuildServiceProvider();

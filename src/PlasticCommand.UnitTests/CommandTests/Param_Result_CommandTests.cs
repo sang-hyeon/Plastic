@@ -1,12 +1,12 @@
 ﻿
-using System;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using PlasticCommand.UnitTests.TestCommands;
+using System;
+using System.Threading.Tasks;
 using Xunit;
 
-namespace PlasticCommand.UnitTests;
+namespace PlasticCommand.UnitTests.CommandTests;
 
 public class Param_Result_CommandTests
 {
@@ -39,7 +39,7 @@ public class Param_Result_CommandTests
 
         var sut = new PrimitiveTypeParamCommand(provider);
 
-        int result = await sut.ExecuteAsync(1);
+        var result = await sut.ExecuteAsync(1);
 
         result.Should().Be(1);
     }

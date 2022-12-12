@@ -1,12 +1,12 @@
 ﻿
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using PlasticCommand.UnitTests.TestCommands;
 using PlasticCommand.UnitTests.TestCommands.Helpers;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace PlasticCommand.UnitTests;
@@ -20,7 +20,7 @@ public class PipelineContextTests
         var pipeMock = new TestPipe();
         var pipelineBuilder = new BuildPipeline(_ =>
         {
-            return new IPipe[]{ pipeMock };
+            return new IPipe[] { pipeMock };
         });
 
         services.AddPlastic(pipelineBuilder);

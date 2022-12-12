@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>Generated</CompilerGeneratedFilesOutputPath>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <!-- metadata -->
+  <PropertyGroup>
+    <Version>2.0.0</Version>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>SangHyeon.Kim</Authors>
+    <Copyright>SangHyeon.Kim</Copyright>
+    <Description>
+      This project provides encapsulation of things like Domain, Application Rules, Business Rules or Business Logic in Application. For this, Command pattern is used.
+
+      All applications such as Web, CLI, GUI application can use this project.
+      This can be part of the Usecase Layer, Domain Service Layer or CQRS.
+    </Description>
+    <PackageProjectUrl>https://github.com/sang-hyeon/Plastic</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sang-hyeon/Plastic</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>domain-service;clean-architecture;usecase;command;command-pattern;plastic;cqrs</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+  </PropertyGroup>
+  <!-- end metadata-->
+  
+  <ItemGroup>
+    <None Remove="Generator\Templates\CommandTemplate\CommandTemplate.txt" />
+    <None Remove="Generator\Templates\InitializerTemplate\ServiceCollectionExtensionsTemplate.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Generator\Templates\CommandTemplate\CommandTemplate.txt" />
+    <EmbeddedResource Include="Generator\Templates\InitializerTemplate\ServiceCollectionExtensionsTemplate.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+</Project>

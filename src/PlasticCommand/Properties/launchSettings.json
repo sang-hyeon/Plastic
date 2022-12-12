@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "프로필 1": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\Debugger\\Debugger.csproj"
+    },
+    "프로필 2": {
+      "commandName": "DebugRoslynComponent",
+      "targetProject": "..\\PlasticCommand.UnitTests\\PlasticCommand.UnitTests.csproj"
+    }
+  }
+}

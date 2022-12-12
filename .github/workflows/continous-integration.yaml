@@ -1,27 +1,26 @@
-name: Build Source Code
+name: Continous Integration
 
 on:
   push:
-    branches: [ main ]
-    paths:
-      - projects/**
+    branches: [ "main" ]
+
+env:
+  SOURCE_DIR: src
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows2022
     steps:
     - uses: actions/checkout@v2
     
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.x
-        
+    - name: Restore Packages
+      working-directory: ${{ env.SOURCE_DIR }}
+      run: dotnet restore
+    
     - name: Build Plastic
-      run: dotnet build projects/Plastic/Plastic/Plastic.csproj -c Release
+      working-directory: ${{ env.SOURCE_DIR }}
+      run: dotnet build -c Release --no-restore
       
-    - name: Test 
-      run: dotnet test projects/Plastic/Plastic.UnitTests/Plastic.UnitTests.csproj -c Release
-
-    - name: Test (internal)
-      run: dotnet test projects/Plastic/Plastic.UnitTests.Internal/Plastic.UnitTests.Internal.csproj -c Release
+    - name: Test
+      working-directory: ${{ env.SOURCE_DIR }}
+      run: dotnet test -c Release

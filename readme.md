@@ -30,23 +30,17 @@ The name of this project is Plastic.
 Step 1. Specify The Command
 ```cs
 // [CommandName("AddCommand")]
-class AddCommandSpec : CommandSpecificationBase<int, int>
+class AddCommandSpec : ICommandSpecification<int, int>
 {
         public AddCommandSpec(IMyCalculator calculator)
         { 
             ...
         }
 
-        public override Task<ExecutionResult<int>> ExecuteAsync(int param, CancellationToken token = default)
+        public Task<int> ExecuteAsync(int param, CancellationToken token = default)
         {
             ...
         }
-        
-        public override Task<Response> CanExecuteAsync(int param, CancellationToken token = default)
-        {
-            return CanBeExecuted();
-        }
-
 }
 ```
 
@@ -60,7 +54,7 @@ void Configure(IServiceCollection services)
 }
 ```
 
-Step 3. Use a generated command
+Step 3. Use a Generated Command
 ```cs
 class AddController : ControllerBase
 {

@@ -27,4 +27,4 @@ jobs:
       run: dotnet test -c Release
       
     - name: Publish Package to Nuget.org
-      run: dotnet nuget push **/*.nupkg --api-key ${{ secrets.NugetApiKey }} --source "nuget.org" --skip-duplicate --no-symbols
+      run: dotnet nuget push **/PlasticCommand.*.nupkg --api-key ${{ secrets.NugetApiKey }} --source "nuget.org" --skip-duplicate --no-symbols

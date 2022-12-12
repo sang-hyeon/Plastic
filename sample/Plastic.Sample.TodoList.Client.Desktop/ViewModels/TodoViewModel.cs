@@ -1,51 +1,50 @@
-﻿namespace Plastic.Sample.TodoList.Client.Desktop.ViewModels
+﻿using GalaSoft.MvvmLight;
+using Plastic.Sample.TodoList.AppCommands;
+
+namespace Plastic.Sample.TodoList.Client.Desktop.ViewModels;
+
+public class TodoViewModel : ViewModelBase
 {
-    using GalaSoft.MvvmLight;
-    using Plastic.Sample.TodoList.AppCommands;
+    private readonly DoneCommand _doneCommand;
+    private readonly TodoAgainCommand _todoAgaineCommand;
+    private readonly int _id;
+    private bool _done;
 
-    public class TodoViewModel : ViewModelBase
+    public string Title { get; }
+
+    public bool Done
     {
-        private readonly DoneCommand _doneCommand;
-        private readonly TodoAgainCommand _todoAgaineCommand;
-        private readonly int _id;
-        private bool _done;
+        get => this._done;
+        set => SetDone(value);
+    }
 
-        public string Title { get; }
+    public TodoViewModel(
+        int id, string title, bool done,
+        DoneCommand doneCommand,
+        TodoAgainCommand todoAgaineCommand)
+    {
+        this._id = id;
+        this.Title = title;
+        this._done = done;
+        this._doneCommand = doneCommand;
+        this._todoAgaineCommand = todoAgaineCommand;
+    }
 
-        public bool Done
+    protected bool SetDone(bool newState)
+    {
+        // HACK: It's sample, don't use like this...
+        bool executed;
+        if (newState)
         {
-            get => this._done;
-            set => SetDone(value);
+            bool result = this._doneCommand.ExecuteAsync(this._id).Result;
+            executed = result;
+        }
+        else
+        {
+            bool result = this._todoAgaineCommand.ExecuteAsync(this._id).Result;
+            executed = result;
         }
 
-        public TodoViewModel(
-            int id, string title, bool done,
-            DoneCommand doneCommand,
-            TodoAgainCommand todoAgaineCommand)
-        {
-            this._id = id;
-            this.Title = title;
-            this._done = done;
-            this._doneCommand = doneCommand;
-            this._todoAgaineCommand = todoAgaineCommand;
-        }
-
-        protected bool SetDone(bool newState)
-        {
-            // HACK: It's sample, Don't use like this...
-            bool executed;
-            if (newState)
-            {
-                ExecutionResult result = this._doneCommand.ExecuteAsync(this._id).Result;
-                executed = result.HasSucceeded();
-            }
-            else
-            {
-                ExecutionResult result = this._todoAgaineCommand.ExecuteAsync(this._id).Result;
-                executed = result.HasSucceeded();
-            }
-
-            return executed ? Set(ref this._done, newState) : false;
-        }
+        return executed && Set(ref this._done, newState);
     }
 }

@@ -1,7 +1,6 @@
-﻿namespace Plastic.Sample.TodoList.Domain
+﻿namespace Plastic.Sample.TodoList.Domain;
+
+public interface IEntity<T>
 {
-    public interface IEntity<T>
-    {
-        public T Id { get; }
-    }
+    public T Id { get; }
 }

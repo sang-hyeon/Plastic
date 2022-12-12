@@ -1,0 +1,54 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31919.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plastic.Sample.TodoList", "Plastic.Sample.TodoList\Plastic.Sample.TodoList.csproj", "{FE389D95-2D2B-41FC-84D1-2E68054C3149}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plastic.Sample.TodoList.Data", "Plastic.Sample.TodoList.Data\Plastic.Sample.TodoList.Data.csproj", "{7A1710B5-E7BA-4E4F-9ABA-180E91A4DA42}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plastic.Sample.TodoList.Client.Desktop", "Plastic.Sample.TodoList.Client.Desktop\Plastic.Sample.TodoList.Client.Desktop.csproj", "{B73BCDFA-2EEA-4ADD-AC1C-50C1346C60DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plastic.Sample.TodoList.Client.WebApi", "Plastic.Sample.TodoList.Client.WebApi\Plastic.Sample.TodoList.Client.WebApi.csproj", "{474BE488-0F70-4925-83BA-72B37752AE96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PlasticCommand", "PlasticCommand", "{E8429254-4ACE-4A35-993D-6B19B30364A2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlasticCommand", "..\src\PlasticCommand\PlasticCommand.csproj", "{5228206B-6A2B-4ED9-B12C-D5543DE6AA7F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FE389D95-2D2B-41FC-84D1-2E68054C3149}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE389D95-2D2B-41FC-84D1-2E68054C3149}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE389D95-2D2B-41FC-84D1-2E68054C3149}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE389D95-2D2B-41FC-84D1-2E68054C3149}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A1710B5-E7BA-4E4F-9ABA-180E91A4DA42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A1710B5-E7BA-4E4F-9ABA-180E91A4DA42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A1710B5-E7BA-4E4F-9ABA-180E91A4DA42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A1710B5-E7BA-4E4F-9ABA-180E91A4DA42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B73BCDFA-2EEA-4ADD-AC1C-50C1346C60DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B73BCDFA-2EEA-4ADD-AC1C-50C1346C60DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B73BCDFA-2EEA-4ADD-AC1C-50C1346C60DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B73BCDFA-2EEA-4ADD-AC1C-50C1346C60DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{474BE488-0F70-4925-83BA-72B37752AE96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{474BE488-0F70-4925-83BA-72B37752AE96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{474BE488-0F70-4925-83BA-72B37752AE96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{474BE488-0F70-4925-83BA-72B37752AE96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5228206B-6A2B-4ED9-B12C-D5543DE6AA7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5228206B-6A2B-4ED9-B12C-D5543DE6AA7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5228206B-6A2B-4ED9-B12C-D5543DE6AA7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5228206B-6A2B-4ED9-B12C-D5543DE6AA7F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5228206B-6A2B-4ED9-B12C-D5543DE6AA7F} = {E8429254-4ACE-4A35-993D-6B19B30364A2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CFCDD942-938E-4FDC-A90C-2766D419F61E}
+	EndGlobalSection
+EndGlobal

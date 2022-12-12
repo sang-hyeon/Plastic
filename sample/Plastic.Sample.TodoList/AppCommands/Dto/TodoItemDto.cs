@@ -1,11 +1,10 @@
-﻿namespace Plastic.Sample.TodoList.AppCommands.Dto
+﻿namespace Plastic.Sample.TodoList.AppCommands.Dto;
+
+public record TodoItemDto
 {
-    public record TodoItemDto
-    {
-        public int Id { get; init; }
+    public int Id { get; init; }
 
-        public string Title { get; init; } = default!;
+    public string Title { get; init; } = default!;
 
-        public bool Done { get; init; }
-    }
+    public bool Done { get; init; }
 }

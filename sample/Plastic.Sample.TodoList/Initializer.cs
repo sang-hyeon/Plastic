@@ -1,23 +1,23 @@
-﻿namespace Plastic.Sample.TodoList
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Plastic.Sample.TodoList.Pipeline;
+using PlasticCommand;
+
+namespace Plastic.Sample.TodoList;
+
+public static class Initializer
 {
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Logging;
-    using Plastic.Sample.TodoList.Pipeline;
-
-    public static class Initializer
+    public static void Init(IServiceCollection collection)
     {
-        public static void Init(IServiceCollection collection)
+        BuildPipeline pipeline = provider =>
         {
-            BuildPipeline pipeline = p =>
+            return new IPipe[]
             {
-                return new Pipe[]
-                {
-                    new LoggingPipe(p.GetRequiredService<ILogger<LoggingPipe>>()),
-                    new TransactionPipe()
-                };
+                new LoggingPipe(provider.GetRequiredService<ILogger<LoggingPipe>>()),
+                new TransactionPipe()
             };
+        };
 
-            collection.AddPlastic(pipeline);
-        }
+        collection.AddPlastic(pipeline);
     }
 }

@@ -1,36 +1,35 @@
-﻿namespace Plastic.Sample.TodoList.AppCommands
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Plastic.Sample.TodoList.Domain;
+using Plastic.Sample.TodoList.ServiceAgents;
+using PlasticCommand;
+
+namespace Plastic.Sample.TodoList.AppCommands;
+
+internal class TodoAgainCommandSpec : ICommandSpecificationWithValidation<int, bool, bool>
 {
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Plastic.Sample.TodoList.Domain;
-    using Plastic.Sample.TodoList.ServiceAgents;
+    private readonly ITodoItemRepository _todoItemRepository;
 
-    internal class TodoAgainCommandSpec : CommandSpecificationBase<int>
+    public TodoAgainCommandSpec(ITodoItemRepository todoItemRepository)
     {
-        private readonly ITodoItemRepository _todoItemRepository;
+        this._todoItemRepository = todoItemRepository;
+    }
 
-        public TodoAgainCommandSpec(ITodoItemRepository todoItemRepository)
-        {
-            this._todoItemRepository = todoItemRepository;
-        }
+    public Task<bool> CanExecuteAsync(int todoItemId, CancellationToken token = default)
+    {
+        bool exists = this._todoItemRepository.Exists(todoItemId);
 
-        public override Task<Response> CanExecuteAsync(int todoItemId, CancellationToken token = default)
-        {
-            bool exists = this._todoItemRepository.Exists(todoItemId);
+        token.ThrowIfCancellationRequested();
+        return Task.FromResult(exists);
+    }
 
-            if (exists)
-                return CanBeExecutedTask();
-            else
-                return CannotBeExecutedTask("Doesn't exist");
-        }
+    public Task<bool> ExecuteAsync(int todoItemId, CancellationToken token = default)
+    {
+        TodoItem todoItem = this._todoItemRepository.GetAll().Single(q => q.Id == todoItemId);
+        todoItem.TodoAgain();
 
-        protected override Task<ExecutionResult> OnExecuteAsync(int todoItemId, CancellationToken token = default)
-        {
-            TodoItem todoItem = this._todoItemRepository.GetAll().Single(q => q.Id == todoItemId);
-            todoItem.TodoAgain();
-
-            return SuccessTask();
-        }
+        token.ThrowIfCancellationRequested();
+        return Task.FromResult(true);
     }
 }

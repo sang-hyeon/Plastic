@@ -1,45 +1,44 @@
-﻿namespace Plastic.Sample.TodoList.Client.Desktop
+﻿using GalaSoft.MvvmLight.Views;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Plastic.Sample.TodoList.Client.Desktop.Services;
+using Plastic.Sample.TodoList.Client.Desktop.ViewModels;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Windows;
+
+namespace Plastic.Sample.TodoList.Client.Desktop;
+
+[SuppressMessage("Performance", "CA1810:참조 형식 정적 필드 인라인을 초기화하세요.", Justification = "sample")]
+public partial class App : Application
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Windows;
-    using GalaSoft.MvvmLight.Views;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using Plastic.Sample.TodoList.Client.Desktop.Services;
-    using Plastic.Sample.TodoList.Client.Desktop.ViewModels;
+    private static readonly IHost _apphost = default!;
 
-    [SuppressMessage("Performance", "CA1810:참조 형식 정적 필드 인라인을 초기화하세요.", Justification = "sample")]
-    public partial class App : Application
+    public static IServiceProvider Provider => _apphost.Services;
+
+    static App()
     {
-        private readonly static IHost _apphost = default!;
+        // HACK: It's sample, Don't use like this...
+        IHostBuilder host = new HostBuilder()
+                                            .ConfigureServices(services =>
+                                            {
+                                                services.AddTransient<TodoListViewModels>();
+                                                services.AddTransient<IDialogService, DialogService>();
 
-        public static IServiceProvider Provider => _apphost.Services;
+                                                Initializer.Init(services);
+                                                Data.Initializer.Init(services);
+                                            })
+                                            .ConfigureLogging(logging =>
+                                            {
+                                                logging.AddConsole();
+                                                logging.AddDebug();
+                                            });
 
-        static App()
-        {
-            // HACK: It's sample, Don't use like this...
-            IHostBuilder host = new HostBuilder()
-                                                .ConfigureServices(services =>
-                                                {
-                                                    services.AddTransient<TodoListViewModels>();
-                                                    services.AddTransient<IDialogService, DialogService>();
+        _apphost = host.Build();
+    }
 
-                                                    Plastic.Sample.TodoList.Initializer.Init(services);
-                                                    Plastic.Sample.TodoList.Data.Initializer.Init(services);
-                                                })
-                                                .ConfigureLogging(logging =>
-                                                {
-                                                    logging.AddConsole();
-                                                    logging.AddDebug();
-                                                });
-
-            _apphost = host.Build();
-        }
-
-        public App()
-        {
-        }
+    public App()
+    {
     }
 }

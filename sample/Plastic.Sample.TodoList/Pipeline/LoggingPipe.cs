@@ -1,29 +1,29 @@
-﻿namespace Plastic.Sample.TodoList.Pipeline
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using PlasticCommand;
+
+namespace Plastic.Sample.TodoList.Pipeline;
+
+public class LoggingPipe : IPipe
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Microsoft.Extensions.Logging;
+    private readonly ILogger<LoggingPipe> _logger;
 
-    public class LoggingPipe : Pipe
+    public LoggingPipe(ILogger<LoggingPipe> logger)
     {
-        private readonly ILogger<LoggingPipe> _logger;
+        this._logger = logger;
+    }
 
-        public LoggingPipe(ILogger<LoggingPipe> logger)
-        {
-            this._logger = logger;
-        }
+    public async Task<object?> Handle(
+        PipelineContext context, Behavior nextBehavior, CancellationToken token)
+    {
+        this._logger.LogInformation($"Execute Command - {context.CommandSpec.Name}");
+        this._logger.LogInformation($"Parameter - {context.Parameter?.ToString()}");
 
-        public async override Task<ExecutionResult> Handle(
-            PipelineContext context, Behavior<ExecutionResult> nextBehavior, CancellationToken token)
-        {
-            this._logger.LogInformation($"Execute Command - {context.CommandSpec.Name}");
-            this._logger.LogInformation($"Parameter - {context.Parameter?.ToString()}");
+        object? result = await nextBehavior.Invoke().ConfigureAwait(false);
 
-            ExecutionResult result = await nextBehavior.Invoke().ConfigureAwait(false);
+        this._logger.LogInformation($"Result - {result}");
 
-            this._logger.LogInformation($"Result - {result}");
-
-            return result;
-        }
+        return result;
     }
 }

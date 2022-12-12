@@ -1,36 +1,32 @@
-﻿namespace Plastic.Sample.TodoList.AppCommands
+﻿using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Plastic.Sample.TodoList.Domain;
+using Plastic.Sample.TodoList.ServiceAgents;
+using PlasticCommand;
+
+namespace Plastic.Sample.TodoList.AppCommands;
+
+internal class DoneCommandSpec : ICommandSpecificationWithValidation<int, bool, bool>
 {
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Plastic.Sample.TodoList.Domain;
-    using Plastic.Sample.TodoList.ServiceAgents;
+    private readonly ITodoItemRepository _todoItemRepository;
 
-    internal class DoneCommandSpec : CommandSpecificationBase<int>
+    public DoneCommandSpec(ITodoItemRepository todoItemRepository)
     {
-        private readonly ITodoItemRepository _todoItemRepository;
+        this._todoItemRepository = todoItemRepository;
+    }
 
-        public DoneCommandSpec(ITodoItemRepository todoItemRepository)
-        {
-            this._todoItemRepository = todoItemRepository;
-        }
+    public Task<bool> CanExecuteAsync(int todoItemId, CancellationToken token = default)
+    {
+        bool exists = this._todoItemRepository.Exists(todoItemId);
+        return Task.FromResult(exists);
+    }
 
-        public override Task<Response> CanExecuteAsync(int todoItemId, CancellationToken token = default)
-        {
-            bool exists = this._todoItemRepository.Exists(todoItemId);
+    public Task<bool> ExecuteAsync(int todoItemId, CancellationToken token = default)
+    {
+        TodoItem todoItem = this._todoItemRepository.GetAll().Single(q => q.Id == todoItemId);
+        todoItem.Done();
 
-            if (exists)
-                return CanBeExecutedTask();
-            else
-                return CannotBeExecutedTask("Doesn't exist");
-        }
-
-        protected override Task<ExecutionResult> OnExecuteAsync(int todoItemId, CancellationToken token = default)
-        {
-            TodoItem todoItem = this._todoItemRepository.GetAll().Single(q => q.Id == todoItemId);
-            todoItem.Done();
-
-            return SuccessTask();
-        }
+        return Task.FromResult(true);
     }
 }

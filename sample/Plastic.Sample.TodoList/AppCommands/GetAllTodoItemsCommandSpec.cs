@@ -1,44 +1,44 @@
-﻿namespace Plastic.Sample.TodoList.AppCommands
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Plastic.Sample.TodoList.AppCommands.Dto;
+using Plastic.Sample.TodoList.Domain;
+using Plastic.Sample.TodoList.ServiceAgents;
+using PlasticCommand;
+
+namespace Plastic.Sample.TodoList.AppCommands;
+
+internal class GetAllTodoItemsCommandSpec
+    : ICommandSpecificationWithValidation<Voidy?, TodoItemDto[], bool>
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Plastic.Sample.TodoList.AppCommands.Dto;
-    using Plastic.Sample.TodoList.Domain;
-    using Plastic.Sample.TodoList.ServiceAgents;
+    private readonly ITodoItemRepository _todoRepo;
 
-    internal class GetAllTodoItemsCommandSpec : ParameterlessCommandSpecificationBase<TodoItemDto[]>
+    public GetAllTodoItemsCommandSpec(ITodoItemRepository repository)
     {
-        private readonly ITodoItemRepository _todoRepo;
+        this._todoRepo = repository;
+    }
 
-        public GetAllTodoItemsCommandSpec(ITodoItemRepository repository)
+    public Task<bool> CanExecuteAsync(Voidy? param, CancellationToken token = default)
+    {
+        return Task.FromResult(true);
+    }
+
+    public Task<TodoItemDto[]> ExecuteAsync(Voidy? param, CancellationToken token = default)
+    {
+        IEnumerable<TodoItem> items = this._todoRepo.GetAll();
+        IEnumerable<TodoItemDto> itemsDto = items.Select(ToDto);
+
+        return Task.FromResult(itemsDto.ToArray());
+    }
+
+    private static TodoItemDto ToDto(TodoItem item)
+    {
+        return new TodoItemDto
         {
-            this._todoRepo = repository;
-        }
-
-        public override Task<Response> CanExecuteAsync(NoParameters? _ = default, CancellationToken token = default)
-        {
-            return CanBeExecutedTask();
-        }
-
-        protected override Task<ExecutionResult<TodoItemDto[]>> OnExecuteAsync(
-            NoParameters? _ = default, CancellationToken token = default)
-        {
-            IEnumerable<TodoItem> items = this._todoRepo.GetAll();
-            IEnumerable<TodoItemDto> itemsDto = items.Select(item => ToDto(item));
-
-            return SuccessTask(itemsDto.ToArray());
-        }
-
-        private static TodoItemDto ToDto(TodoItem item)
-        {
-            return new TodoItemDto
-            {
-                Id = item.Id,
-                Title = item.Title,
-                Done = item.IsDone
-            };
-        }
+            Id = item.Id,
+            Title = item.Title,
+            Done = item.IsDone
+        };
     }
 }

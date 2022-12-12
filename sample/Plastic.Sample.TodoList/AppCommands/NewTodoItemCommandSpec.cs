@@ -1,34 +1,32 @@
-﻿namespace Plastic.Sample.TodoList.AppCommands
+﻿using Plastic.Sample.TodoList.ServiceAgents;
+using PlasticCommand;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace Plastic.Sample.TodoList.AppCommands;
+
+internal class NewTodoItemCommandSpec
+    : ICommandSpecificationWithValidation<(string Title, string? Note), bool, bool>
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Plastic;
-    using Plastic.Sample.TodoList.ServiceAgents;
+    private readonly ITodoItemRepository _todoItemRepository;
 
-    internal class NewTodoItemCommandSpec : CommandSpecificationBase<(string Title, string? Note)>
+    public NewTodoItemCommandSpec(ITodoItemRepository todoItemRepository)
     {
-        private readonly ITodoItemRepository _todoItemRepository;
+        this._todoItemRepository = todoItemRepository;
+    }
 
-        public NewTodoItemCommandSpec(ITodoItemRepository todoItemRepository)
-        {
-            this._todoItemRepository = todoItemRepository;
-        }
+    public Task<bool> ExecuteAsync(
+        (string Title, string? Note) param, CancellationToken token = default)
+    {
+        this._todoItemRepository.Add(param.Title, param.Note);
 
-        public override Task<Response> CanExecuteAsync(
-            (string Title, string? Note) param, CancellationToken token = default)
-        {
-            if (string.IsNullOrEmpty(param.Title))
-                return CannotBeExecutedTask("Blank titles are not allowed.");
-            else
-                return CanBeExecutedTask();
-        }
+        token.ThrowIfCancellationRequested();
+        return Task.FromResult(true);
+    }
 
-        protected override Task<ExecutionResult> OnExecuteAsync(
-            (string Title, string? Note) param, CancellationToken token = default)
-        {
-            this._todoItemRepository.Add(param.Title, param.Note);
-
-            return SuccessTask();
-        }
+    public Task<bool> CanExecuteAsync((string Title, string? Note) param, CancellationToken token)
+    {
+        token.ThrowIfCancellationRequested();
+        return Task.FromResult(string.IsNullOrEmpty(param.Title));
     }
 }

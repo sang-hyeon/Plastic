@@ -12,8 +12,7 @@ namespace {{ Namespace }}
     using Generator = PlasticCommand.Generator;
     using TargetCommandSpec = PlasticCommand.Generator.TTFFCommandSpec;
 
-    // replace: internal to public
-    internal sealed class TTFFCommand : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
+    public sealed class TTFFCommand : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
     {
         private readonly IServiceProvider _provider;
 

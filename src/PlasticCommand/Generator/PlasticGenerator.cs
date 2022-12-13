@@ -106,7 +106,8 @@ internal class PlasticGenerator : ISourceGenerator
             INamedTypeSymbol commandSpecSymbol =
                 context.SemanticModel.Compilation.GetTypeByMetadataName(ICOMMAND_SPEC_NAME)!;
 
-            return target.AllInterfaces.Any(q => SymbolEquals(q.ConstructedFrom, commandSpecSymbol))
+            return target.IsAbstract == false
+                        && target.AllInterfaces.Any(q => SymbolEquals(q.ConstructedFrom, commandSpecSymbol))
                         && target.ContainingNamespace.GetTypeMembers().Contains(target);
         }
     }

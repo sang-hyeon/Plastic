@@ -1,6 +1,6 @@
 ﻿
 [![Build Source Code](https://github.com/sang-hyeon/PlasticCommand/actions/workflows/continous-integration.yaml/badge.svg)](https://github.com/sang-hyeon/PlasticCommand/actions/workflows/continous-integration.yaml)
-[![Nuget](https://img.shields.io/nuget/v/Plastic)](https://www.nuget.org/packages/Plastic/)
+[![Nuget](https://img.shields.io/nuget/v/PlasticCommand)](https://www.nuget.org/packages/PlasticCommand/)
 
 <br>
 

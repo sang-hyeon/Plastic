@@ -3,11 +3,11 @@
 namespace PlasticCommand;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-public sealed class CommandNameAttribute : Attribute
+public sealed class PlasticCommandAttribute : Attribute
 {
     public string GeneratedCommandName { get; }
 
-    public CommandNameAttribute(string generatedCommandName)
+    public PlasticCommandAttribute(string generatedCommandName)
     {
         this.GeneratedCommandName = generatedCommandName;
     }

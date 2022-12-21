@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using PlasticCommand.Generator.CommandGenerators;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,22 +24,20 @@ internal class PlasticGenerator : ISourceGenerator
             return;
 
         var generatedCommands = new HashSet<GeneratedCommandInfo>();
-        var generators = new TemplateBasedCommandGenerator[]
+        var generators = new CommandGenerator[]
         {
-            new ValidatableCommandGenerator(),
-            new CommandGenerator()
+            new ValidatableCommandGenerator(context),
+            new CommandGenerator(context)
         };
 
         foreach (TypeDeclarationSyntax userCommandSpec in receiver.Targets)
         {
-            foreach (TemplateBasedCommandGenerator generator in generators)
+            foreach (CommandGenerator generator in generators)
             {
-                GeneratedCommandInfo? generatedCommandInfo =
-                    generator.GenerateCommand(context, userCommandSpec);
-
-                if (generatedCommandInfo != null)
+                GeneratedCommandInfo? generatedCommand = generator.Generate(userCommandSpec);
+                if (generatedCommand is not null)
                 {
-                    generatedCommands.Add(generatedCommandInfo);
+                    generatedCommands.Add(generatedCommand);
                     break;
                 }
             }

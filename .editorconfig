@@ -45,6 +45,10 @@ indent_size = 2
 [*.yml]
 indent_size = 2
 
+# .csproj files
+[*.csproj]
+indent_size = 2
+
 [*.cs]
 #### Guide lines on Visual Studio####
 guidelines = 130

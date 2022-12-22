@@ -12,8 +12,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루�
 		..\.editorconfig = ..\.editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlasticCommand.Tests", "PlasticCommand.Tests\PlasticCommand.Tests.csproj", "{FFDB977B-1DED-4CB4-9D43-26A520007296}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,10 +26,6 @@ Global
 		{15F5BB04-19A6-4684-8206-3151CF6DBD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15F5BB04-19A6-4684-8206-3151CF6DBD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15F5BB04-19A6-4684-8206-3151CF6DBD0B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFDB977B-1DED-4CB4-9D43-26A520007296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFDB977B-1DED-4CB4-9D43-26A520007296}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFDB977B-1DED-4CB4-9D43-26A520007296}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFDB977B-1DED-4CB4-9D43-26A520007296}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

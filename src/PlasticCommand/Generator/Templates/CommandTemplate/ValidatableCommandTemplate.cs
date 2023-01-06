@@ -71,7 +71,7 @@ namespace Templates // replace: to {{ Namespace }}
             {
                 TargetCommandSpec spec = provider.GetRequiredService<TargetCommandSpec>();
                 return spec.ExecuteAsync(param, token)
-                            .ContinueWith(task => (object?)task.Result, default, TaskContinuationOptions.None, TaskScheduler.Current);
+                            .ContinueWith(task => (object?)task.Result, TaskContinuationOptions.ExecuteSynchronously);
             });
         }
     }

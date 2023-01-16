@@ -61,7 +61,8 @@ class AddController : ControllerBase
         public AddController(AddCommand addCommand)
         {
                 ...
-                var result = addCommand.Execute( 1 );
+                ...
+                int result = addCommand.ExecuteAsync( 1 );
         }
 }
 ```

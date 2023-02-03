@@ -18,6 +18,12 @@ public class ServiceCommandSpec : ICommandSpecification<int, IEnumerable<object>
         this.Test2Service = test2Service;
     }
 
+    /// <summary>
+    /// Hello
+    /// </summary>
+    /// <param name="param"></param>
+    /// <param name="token"></param>
+    /// <returns></returns>
     public Task<IEnumerable<object>> ExecuteAsync(int param, CancellationToken token = default)
     {
         return Task.FromResult(new object[]

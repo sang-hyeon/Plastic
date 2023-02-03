@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Linq;
@@ -29,8 +30,8 @@ internal class CommandSpecAnalyzer
         INamedTypeSymbol rootCommandSpecInterface,
         SemanticModel model)
     {
-        var implementedCommandSpec =
-            (INamedTypeSymbol?)model.GetDeclaredSymbol(implementedCommandSpecSyntax);
+        INamedTypeSymbol? implementedCommandSpec =
+            model.GetDeclaredSymbol(implementedCommandSpecSyntax);
 
         if (implementedCommandSpec == null)
             return default;
@@ -47,7 +48,8 @@ internal class CommandSpecAnalyzer
                 implementedCommandSpec,
                 declaredInterface.TypeArguments[0],
                 declaredInterface.TypeArguments[1],
-                FindAttribute(implementedCommandSpec)
+                FindAttribute(implementedCommandSpec),
+                GetXmlCommentsOfExecuteMethod(declaredInterface, implementedCommandSpec)
             );
     }
 
@@ -72,6 +74,21 @@ internal class CommandSpecAnalyzer
         return implementedCommand
                     .GetAttributes()
                     .FirstOrDefault(att => att.AttributeClass?.ToString() == attributeName);
+    }
+
+    private SyntaxTrivia GetXmlCommentsOfExecuteMethod(
+        INamedTypeSymbol declaredInterface, INamedTypeSymbol implementedCommandSpec)
+    {
+        ISymbol executeMethodContract = declaredInterface.GetMembers().Single();
+        ISymbol executeMethodImpl =
+            implementedCommandSpec.FindImplementationForInterfaceMember(executeMethodContract)!;
+
+        SyntaxTrivia xml = executeMethodImpl.DeclaringSyntaxReferences
+                                            .Single()
+                                            .GetSyntax()
+                                            .GetLeadingTrivia()
+                                            .FirstOrDefault(x => x.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia));
+        return xml;
     }
 
     private static INamedTypeSymbol? GetDeclaredInterface(

@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlasticCommand.UnitTests", "PlasticCommand.UnitTests\PlasticCommand.UnitTests.csproj", "{A005EA60-6C89-43AB-9BB4-D85DF1A008FF}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlasticCommand", "PlasticCommand\PlasticCommand.csproj", "{15F5BB04-19A6-4684-8206-3151CF6DBD0B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루션 항목", "{02BE1BE3-8430-4BFB-B660-613CFF37C5E6}"
@@ -12,20 +10,22 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "솔루션 항목", "솔루�
 		..\.editorconfig = ..\.editorconfig
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PlasticCommand.UnitTests", "PlasticCommand.UnitTests\PlasticCommand.UnitTests.csproj", "{D21EE331-2C34-42F8-A123-2338E2ECFFAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{A005EA60-6C89-43AB-9BB4-D85DF1A008FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A005EA60-6C89-43AB-9BB4-D85DF1A008FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A005EA60-6C89-43AB-9BB4-D85DF1A008FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A005EA60-6C89-43AB-9BB4-D85DF1A008FF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{15F5BB04-19A6-4684-8206-3151CF6DBD0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{15F5BB04-19A6-4684-8206-3151CF6DBD0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15F5BB04-19A6-4684-8206-3151CF6DBD0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15F5BB04-19A6-4684-8206-3151CF6DBD0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D21EE331-2C34-42F8-A123-2338E2ECFFAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D21EE331-2C34-42F8-A123-2338E2ECFFAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D21EE331-2C34-42F8-A123-2338E2ECFFAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D21EE331-2C34-42F8-A123-2338E2ECFFAE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

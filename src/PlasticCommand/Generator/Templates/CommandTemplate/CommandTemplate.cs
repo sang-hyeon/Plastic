@@ -13,7 +13,12 @@ namespace Templates // replace: to {{ Namespace }}
     using TargetCommandSpec = PlasticCommand.Generator.TTFFCommandSpec;
 
     // replace: internal to public
-    internal class TTFFCommand : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
+    internal interface TTFFGeneratedCommandInterface : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
+    {
+    }
+    
+    // replace: internal to public
+    internal class TTFFCommand : TTFFGeneratedCommandInterface
     {
         private readonly IServiceProvider _provider;
 

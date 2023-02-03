@@ -55,7 +55,14 @@ internal class PlasticGenerator : ISourceGenerator
         foreach (GeneratedCommandInfo commandName in generatedCommands)
         {
             builder.AppendLine($"\t\t\tservices.AddTransient(typeof({commandName.CommandSpecFullName}));");
-            builder.AppendLine($"\t\t\tservices.AddTransient(typeof({commandName.GeneratedCommandName}));");
+            builder.AppendLine($"\t\t\tservices.AddTransient(typeof({commandName.GeneratedCommandFullName}));");
+
+            string register = string.Format(
+                "\t\t\tservices.AddTransient<{0},{1}>();",
+                commandName.GeneratedCommandInterfaceFullName,
+                commandName.GeneratedCommandFullName);
+
+            builder.AppendLine(register);
         }
 
         string generatedCode = template.Replace("{{ ServicesToBeAdded }}", builder.ToString());

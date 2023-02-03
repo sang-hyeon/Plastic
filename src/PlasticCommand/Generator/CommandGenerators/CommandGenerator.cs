@@ -36,6 +36,7 @@ internal class CommandGenerator
             BuildServiceInjectionCodeForPipelineContext(analysis);
 
         string commandName = GenerateCommandName(analysis);
+        string commandInterfaceName = "I" + commandName;
         string @namespace = analysis.ImplementedClass.ContainingNamespace.ToString();
         string comment = analysis.XmlComments.Token.LeadingTrivia.ToString();
 
@@ -47,11 +48,13 @@ internal class CommandGenerator
         commandBuilder.Replace("TTFFCommand", commandName);
         commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
         commandBuilder.Replace("{{ Comment }}", comment);
+        commandBuilder.Replace("TTFFGeneratedCommandInterface", commandInterfaceName);
 
         this.Context.AddSource($"{commandName}.cs", commandBuilder.ToString());
 
         return new GeneratedCommandInfo(
             @namespace + "." + commandName,
+            @namespace + "." + commandInterfaceName,
             analysis.ImplementedClass.ToString());
     }
 

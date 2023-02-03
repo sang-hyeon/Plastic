@@ -43,4 +43,9 @@ public class Param_Result_CommandTests
 
         result.Should().Be(1);
     }
+
+    [Fact]
+    public void generate_interface_of_command()
+    {
+    }
 }

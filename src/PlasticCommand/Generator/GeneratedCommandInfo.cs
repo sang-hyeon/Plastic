@@ -2,12 +2,16 @@
 
 internal record GeneratedCommandInfo
 {
-    public readonly string CommandSpecFullName;
-    public readonly string GeneratedCommandName;
+    public string CommandSpecFullName { get; }
+    public string GeneratedCommandFullName { get; }
+    public string GeneratedCommandInterfaceFullName { get; }
 
-    public GeneratedCommandInfo(string generatedCommandName, string commandSpecName)
+    public GeneratedCommandInfo(
+        string generatedCommandName, string generatedCommandInterface,
+        string commandSpecName)
     {
-        this.GeneratedCommandName = generatedCommandName;
+        this.GeneratedCommandFullName = generatedCommandName;
+        this.GeneratedCommandInterfaceFullName = generatedCommandInterface;
         this.CommandSpecFullName = commandSpecName;
     }
 }

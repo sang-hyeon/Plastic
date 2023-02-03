@@ -36,6 +36,7 @@ internal class ValidatableCommandGenerator
             BuildServiceInjectionCodeForPipelineContext(analysis);
 
         string commandName = GenerateCommandName(analysis);
+        string commandInterfaceName = "I" + commandName;
         string @namespace = analysis.ImplementedClass.ContainingNamespace.ToString();
         string comment = analysis.XmlComments.Token.LeadingTrivia.ToString();
 
@@ -49,11 +50,14 @@ internal class ValidatableCommandGenerator
         commandBuilder.Replace("TTFFValidatableCommand", commandName);
         commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
         commandBuilder.Replace("{{ Comment }}", comment);
+        commandBuilder.Replace("TTFFGeneratedValidatableCommandInterface", commandInterfaceName);
 
         this.Context.AddSource($"{commandName}.cs", commandBuilder.ToString());
 
         return new GeneratedCommandInfo(
-            @namespace + "." + commandName, analysis.ImplementedClass.ToString());
+            @namespace + "." + commandName,
+            @namespace + "." + commandInterfaceName,
+            analysis.ImplementedClass.ToString());
     }
 
     protected override string GetTemplate()

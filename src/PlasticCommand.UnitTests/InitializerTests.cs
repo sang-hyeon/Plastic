@@ -30,4 +30,16 @@ public class InitializerTests
 
         actualCommand.Should().NotBeNull();
     }
+
+    [Fact]
+    public void register_generated_command_as_interface()
+    {
+        var services = new ServiceCollection();
+        services.AddPlastic();
+        ServiceProvider provider = services.BuildServiceProvider();
+
+        ITestCommand actualCommand = provider.GetService<ITestCommand>();
+
+        (actualCommand is TestCommand).Should().BeTrue();
+    }
 }

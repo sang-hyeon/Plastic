@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PlasticCommand.Generator.Analysis;
 using System.Text;
+using System.Xml.Linq;
 
 namespace PlasticCommand.Generator.CommandGenerators;
 
@@ -36,6 +37,7 @@ internal class ValidatableCommandGenerator
 
         string commandName = GenerateCommandName(analysis);
         string @namespace = analysis.ImplementedClass.ContainingNamespace.ToString();
+        string comment = analysis.XmlComments.Token.LeadingTrivia.ToString();
 
         var commandBuilder = new StringBuilder(template);
         commandBuilder.Replace("{{ Namespace }}", @namespace);
@@ -46,6 +48,7 @@ internal class ValidatableCommandGenerator
             "PlasticCommand.Generator.TTFFValidatableCommandSpec", analysis.ImplementedClass.ToString());
         commandBuilder.Replace("TTFFValidatableCommand", commandName);
         commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
+        commandBuilder.Replace("{{ Comment }}", comment);
 
         this.Context.AddSource($"{commandName}.cs", commandBuilder.ToString());
 

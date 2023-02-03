@@ -22,6 +22,7 @@ namespace {{ Namespace }}
             this._provider = provider;
         }
 
+        {{ Comment }}
         public Task<Generator.TTFFValidationResult> CanExecuteAsync(
             Generator.TTFFParameter param, CancellationToken token = default)
         {

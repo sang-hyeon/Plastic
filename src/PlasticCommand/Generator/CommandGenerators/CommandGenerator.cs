@@ -37,6 +37,7 @@ internal class CommandGenerator
 
         string commandName = GenerateCommandName(analysis);
         string @namespace = analysis.ImplementedClass.ContainingNamespace.ToString();
+        string comment = analysis.XmlComments.Token.LeadingTrivia.ToString();
 
         var commandBuilder = new StringBuilder(template);
         commandBuilder.Replace("{{ Namespace }}", @namespace);
@@ -45,6 +46,7 @@ internal class CommandGenerator
         commandBuilder.Replace("PlasticCommand.Generator.TTFFCommandSpec", analysis.ImplementedClass.ToString());
         commandBuilder.Replace("TTFFCommand", commandName);
         commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
+        commandBuilder.Replace("{{ Comment }}", comment);
 
         this.Context.AddSource($"{commandName}.cs", commandBuilder.ToString());
 

@@ -13,9 +13,10 @@ internal class ValidatableCommandSpecAnalysisResult : CommandSpecAnalysisResult
         ITypeSymbol param,
         ITypeSymbol result,
         ITypeSymbol validationResult,
+        SyntaxTrivia xmlComments,
         AttributeData? plasticCommandAttribute)
         : base(baseInterface, declaredInterface,
-                    implementedClass, param, result, plasticCommandAttribute)
+                    implementedClass, param, result, plasticCommandAttribute, xmlComments)
     {
         this.ValidationResult = validationResult;
     }

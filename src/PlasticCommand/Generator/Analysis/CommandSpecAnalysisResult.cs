@@ -16,13 +16,16 @@ internal class CommandSpecAnalysisResult
 
     public AttributeData? PlasticCommandAttribute { get; }
 
+    public SyntaxTrivia XmlComments { get; }
+
     public CommandSpecAnalysisResult(
         INamedTypeSymbol baseInterface,
         INamedTypeSymbol declaredInterface,
         INamedTypeSymbol implementedClass,
         ITypeSymbol param,
         ITypeSymbol result,
-        AttributeData? plasticCommandAttribute)
+        AttributeData? plasticCommandAttribute,
+        SyntaxTrivia commentXml)
     {
         this.BaseInterface = baseInterface;
         this.DeclaredInterface = declaredInterface;
@@ -30,5 +33,6 @@ internal class CommandSpecAnalysisResult
         this.Param = param;
         this.Result = result;
         this.PlasticCommandAttribute = plasticCommandAttribute;
+        this.XmlComments = commentXml;
     }
 }

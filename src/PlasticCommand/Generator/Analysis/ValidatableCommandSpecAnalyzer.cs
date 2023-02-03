@@ -28,6 +28,7 @@ internal class ValidatableCommandSpecAnalyzer : CommandSpecAnalyzer
                 result.Param,
                 result.Result,
                 result.DeclaredInterface.TypeArguments[2],
+                result.XmlComments,
                 result.PlasticCommandAttribute
                 );
         }

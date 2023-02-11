@@ -14,6 +14,9 @@ namespace {{ Namespace }}
 
     public interface TTFFGeneratedCommandInterface : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
     {
+        {{ Comment }}
+        Task<Generator.TTFFResult> ExecuteAsync(
+            Generator.TTFFParameter param, CancellationToken token = default);
     }
     
     public sealed class TTFFCommand : TTFFGeneratedCommandInterface
@@ -24,8 +27,7 @@ namespace {{ Namespace }}
         {
             this._provider = provider;
         }
-
-        {{ Comment }}
+        
         public async Task<Generator.TTFFResult> ExecuteAsync(
             Generator.TTFFParameter param, CancellationToken token = default)
         {

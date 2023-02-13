@@ -50,7 +50,7 @@ internal class CommandGenerator
         commandBuilder.Replace("{{ Comment }}", comment);
         commandBuilder.Replace("TTFFGeneratedCommandInterface", commandInterfaceName);
 
-        this.Context.AddSource($"{commandName}.cs", commandBuilder.ToString());
+        this.Context.AddSource($"{@namespace}.{commandName}.cs", commandBuilder.ToString());
 
         return new GeneratedCommandInfo(
             @namespace + "." + commandName,

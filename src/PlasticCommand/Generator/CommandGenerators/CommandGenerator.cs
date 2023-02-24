@@ -84,7 +84,7 @@ internal class CommandGenerator
             var builder = new StringBuilder();
             foreach (IParameterSymbol item in parameters)
             {
-                builder.Append($"\t\t\t\tprovider.GetService<{item}>(),\n");
+                builder.Append($"\t\t\t\tprovider.GetService<{item.Type}>(),\n");
                 builder.Replace("?", string.Empty); // to not null
             }
 

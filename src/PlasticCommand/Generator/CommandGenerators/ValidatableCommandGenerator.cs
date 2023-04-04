@@ -2,7 +2,6 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PlasticCommand.Generator.Analysis;
 using System.Text;
-using System.Xml.Linq;
 
 namespace PlasticCommand.Generator.CommandGenerators;
 

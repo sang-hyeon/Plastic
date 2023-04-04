@@ -38,7 +38,7 @@ public class InitializerTests
         services.AddPlastic();
         ServiceProvider provider = services.BuildServiceProvider();
 
-        ITestCommand actualCommand = provider.GetService<ITestCommand>();
+        ITestCommand actualCommand = provider.GetRequiredService<ITestCommand>();
 
         (actualCommand is TestCommand).Should().BeTrue();
     }

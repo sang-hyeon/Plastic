@@ -11,11 +11,17 @@ namespace PlasticCommand
                 services.AddTransient<BuildPipeline>(_ => pipelineBuilder);
 
             AddGeneratedCommands(services);
+            AddGeneratedCommandGroups(services);
         }
 
         private static void AddGeneratedCommands(IServiceCollection services)
         {
 {{ ServicesToBeAdded }}
+        }
+
+        private static void AddGeneratedCommandGroups(IServiceCollection services)
+        {
+{{CommandGroups}}
         }
     }
 }

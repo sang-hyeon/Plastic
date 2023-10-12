@@ -43,11 +43,15 @@ internal class PlasticGenerator : ISourceGenerator
             }
         }
 
-        GeneratePlasticInitializer(context, generatedCommands);
+        var commandsGenerator = new CommandsGenerator(context);
+        HashSet<string> generatedGroups = commandsGenerator.Generate(generatedCommands);
+        GeneratePlasticInitializer(context, generatedCommands, generatedGroups);
     }
 
     private static void GeneratePlasticInitializer(
-        GeneratorExecutionContext contextToAdd, ICollection<GeneratedCommandInfo> generatedCommands)
+        GeneratorExecutionContext contextToAdd,
+        ICollection<GeneratedCommandInfo> generatedCommands,
+        IEnumerable<string> generatedCommandGroups)
     {
         string template = Helper.ReadEmbeddedResourceAsString(INITIALIZER_TEMPLATE);
 
@@ -64,8 +68,15 @@ internal class PlasticGenerator : ISourceGenerator
 
             builder.AppendLine(register);
         }
-
         string generatedCode = template.Replace("{{ ServicesToBeAdded }}", builder.ToString());
+
+        builder = new StringBuilder();
+        foreach (string group in generatedCommandGroups)
+        {
+            builder.AppendLine($"\t\t\tservices.AddTransient(typeof({group}));");
+        }
+        generatedCode = generatedCode.Replace("{{CommandGroups}}", builder.ToString());
+
         contextToAdd.AddSource("PlasticInitializer.cs", generatedCode);
     }
 

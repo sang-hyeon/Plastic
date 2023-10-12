@@ -36,11 +36,13 @@
   <ItemGroup>
     <None Remove="Generator\Templates\CommandTemplate\CommandTemplate.txt" />
     <None Remove="Generator\Templates\CommandTemplate\ValidatableCommandTemplate.txt" />
+    <None Remove="Generator\Templates\CommandsTemplate\CommandsTemplate.txt" />
     <None Remove="Generator\Templates\InitializerTemplate\ServiceCollectionExtensionsTemplate.txt" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Generator\Templates\CommandTemplate\ValidatableCommandTemplate.txt" />
     <EmbeddedResource Include="Generator\Templates\CommandTemplate\CommandTemplate.txt" />
+    <EmbeddedResource Include="Generator\Templates\CommandsTemplate\CommandsTemplate.txt" />
     <EmbeddedResource Include="Generator\Templates\InitializerTemplate\ServiceCollectionExtensionsTemplate.txt" />
   </ItemGroup>
 

@@ -57,7 +57,8 @@ internal class ValidatableCommandGenerator
         return new GeneratedCommandInfo(
             @namespace + "." + commandName,
             @namespace + "." + commandInterfaceName,
-            analysis.ImplementedClass.ToString());
+            analysis.ImplementedClass.ToString(),
+            analysis);
     }
 
     protected override string GetTemplate()

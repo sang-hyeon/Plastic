@@ -56,7 +56,8 @@ internal class CommandGenerator
         return new GeneratedCommandInfo(
             @namespace + "." + commandName,
             @namespace + "." + commandInterfaceName,
-            analysis.ImplementedClass.ToString());
+            analysis.ImplementedClass.ToString(),
+            analysis);
     }
 
 

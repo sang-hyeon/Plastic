@@ -2,6 +2,7 @@
 namespace PlasticCommand
 {
     using Microsoft.Extensions.DependencyInjection;
+    using System;
 
     internal static class ServiceCollectionExtensions
     {
@@ -11,11 +12,17 @@ namespace PlasticCommand
                 services.AddTransient<BuildPipeline>(_ => pipelineBuilder);
 
             AddGeneratedCommands(services);
+            AddGeneratedCommandGroups(services);
         }
 
         private static void AddGeneratedCommands(IServiceCollection services)
         {
             services.AddTransient(typeof(Templates.TTFFCommand)); // replace: on template
+        }
+
+        private static void AddGeneratedCommandGroups(IServiceCollection services)
+        {
+            // {{CommandGroups}}
         }
     }
 }

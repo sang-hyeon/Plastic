@@ -46,6 +46,7 @@ internal class CommandSpecAnalyzer
                 rootCommandSpecInterface,
                 declaredInterface,
                 implementedCommandSpec,
+                (IMethodSymbol)implementedCommandSpec.GetMembers("ExecuteAsync")[0],
                 declaredInterface.TypeArguments[0],
                 declaredInterface.TypeArguments[1],
                 FindAttribute(implementedCommandSpec),

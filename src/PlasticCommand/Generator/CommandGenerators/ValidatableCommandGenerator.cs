@@ -44,12 +44,13 @@ internal class ValidatableCommandGenerator
         commandBuilder.Replace("Generator.TTFFResult", analysis.Result.ToString());
         commandBuilder.Replace("Generator.TTFFParameter", analysis.Param.ToString());
         commandBuilder.Replace("Generator.TTFFValidationResult", analysis.ValidationResult.ToString());
-        commandBuilder.Replace(
-            "PlasticCommand.Generator.TTFFValidatableCommandSpec", analysis.ImplementedClass.ToString());
+        commandBuilder.Replace("PlasticCommand.Generator.TTFFValidatableCommandSpec", analysis.ImplementedClass.ToString());
         commandBuilder.Replace("TTFFValidatableCommand", commandName);
         commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
         commandBuilder.Replace("{{ Comment }}", comment);
         commandBuilder.Replace("TTFFGeneratedValidatableCommandInterface", commandInterfaceName);
+        commandBuilder.Replace("TTFFParamName", analysis.ExecuteMethod.Parameters[0].Name);
+        commandBuilder.Replace("TTFFCanExecuteParamName", analysis.CanExecuteMethod.Parameters[0].Name);
 
         this.Context.AddSource($"{commandName}.cs", commandBuilder.ToString());
 

@@ -49,6 +49,7 @@ internal class CommandGenerator
         commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
         commandBuilder.Replace("{{ Comment }}", comment);
         commandBuilder.Replace("TTFFGeneratedCommandInterface", commandInterfaceName);
+        commandBuilder.Replace("TTFFParamName", analysis.ExecuteMethod.Parameters[0].Name);
 
         this.Context.AddSource($"{@namespace}.{commandName}.cs", commandBuilder.ToString());
 

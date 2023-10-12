@@ -7,7 +7,7 @@ namespace PlasticCommand.UnitTests.TestCommands;
 
 public class ThrowsCommandSpec : ICommandSpecification<Voidy?, Voidy?>
 {
-    public Task<Voidy?> ExecuteAsync(Voidy? param, CancellationToken token = default)
+    public Task<Voidy?> ExecuteAsync(Voidy? voidyParameter, CancellationToken token = default)
     {
         throw new InvalidOperationException();
     }

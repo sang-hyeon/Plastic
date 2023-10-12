@@ -10,6 +10,8 @@ internal class CommandSpecAnalysisResult
 
     public INamedTypeSymbol ImplementedClass { get; }
 
+    public IMethodSymbol ExecuteMethod { get; }
+
     public ITypeSymbol Param { get; }
 
     public ITypeSymbol Result { get; }
@@ -22,6 +24,7 @@ internal class CommandSpecAnalysisResult
         INamedTypeSymbol baseInterface,
         INamedTypeSymbol declaredInterface,
         INamedTypeSymbol implementedClass,
+        IMethodSymbol executeMethod,
         ITypeSymbol param,
         ITypeSymbol result,
         AttributeData? plasticCommandAttribute,
@@ -30,6 +33,7 @@ internal class CommandSpecAnalysisResult
         this.BaseInterface = baseInterface;
         this.DeclaredInterface = declaredInterface;
         this.ImplementedClass = implementedClass;
+        this.ExecuteMethod = executeMethod;
         this.Param = param;
         this.Result = result;
         this.PlasticCommandAttribute = plasticCommandAttribute;

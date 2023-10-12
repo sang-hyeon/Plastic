@@ -25,12 +25,13 @@ internal class ValidatableCommandSpecAnalyzer : CommandSpecAnalyzer
                 result.BaseInterface,
                 result.DeclaredInterface,
                 result.ImplementedClass,
+                result.ExecuteMethod,
+                (IMethodSymbol)result.ImplementedClass.GetMembers("CanExecuteAsync")[0],
                 result.Param,
                 result.Result,
                 result.DeclaredInterface.TypeArguments[2],
                 result.XmlComments,
-                result.PlasticCommandAttribute
-                );
+                result.PlasticCommandAttribute);
         }
         else
             return default;

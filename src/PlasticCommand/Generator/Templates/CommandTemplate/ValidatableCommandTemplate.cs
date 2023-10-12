@@ -29,14 +29,14 @@ namespace Templates // replace: to {{ Namespace }}
         }
 
         public Task<Generator.TTFFValidationResult> CanExecuteAsync(
-            Generator.TTFFParameter param, CancellationToken token = default)
+            Generator.TTFFParameter TTFFCanExecuteParamName, CancellationToken token = default)
         {
             var command = this._provider.GetRequiredService<TargetCommandSpec>();
-            return command.CanExecuteAsync(param, token);
+            return command.CanExecuteAsync(TTFFCanExecuteParamName, token);
         }
 
         public async Task<Generator.TTFFResult> ExecuteAsync(
-            Generator.TTFFParameter param, CancellationToken token = default)
+            Generator.TTFFParameter TTFFParamName, CancellationToken token = default)
         {
             Generator.TTFFResult response;
             using (IServiceScope scope = this._provider.CreateScope())
@@ -44,9 +44,9 @@ namespace Templates // replace: to {{ Namespace }}
                 BuildPipeline? pipelineBuilder = scope.ServiceProvider.GetService<BuildPipeline>();
                 IEnumerable<IPipe> pipeline = pipelineBuilder?.Invoke(scope.ServiceProvider) ?? Array.Empty<IPipe>();
                 pipeline = pipeline.Reverse();
-                PipelineContext context = CreatePipelineContext(param, scope.ServiceProvider);
+                PipelineContext context = CreatePipelineContext(TTFFParamName, scope.ServiceProvider);
 
-                Behavior command = CreateCommandAsBehavior(scope.ServiceProvider, param, token);
+                Behavior command = CreateCommandAsBehavior(scope.ServiceProvider, TTFFParamName, token);
                 Behavior process =
                     pipeline.Aggregate(command, (next, pipe) => () => pipe.Handle(context, next, token));
 

@@ -62,7 +62,7 @@ internal class CommandsGenerator
             string cancelTypeName = command.AnalysisResult.ExecuteMethod.Parameters[1].ToDisplayString();
             builder.AppendLine($"\t\tpublic {returnTypeName} {methodName}({paramTypeName}, {cancelTypeName} = default)");
             builder.AppendLine("\t\t{");
-            builder.AppendLine($"\t\t\treturn this.{name}.ExecuteAsync({paramArgName}, token);");
+            builder.AppendLine($"\t\t\treturn this.{name}.ExecuteAsync({paramArgName}, {cancelTypeName});");
             builder.AppendLine("\t\t}");
             builder.AppendLine();
         }

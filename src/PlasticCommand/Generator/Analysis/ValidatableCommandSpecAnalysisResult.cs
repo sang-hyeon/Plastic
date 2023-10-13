@@ -17,7 +17,7 @@ internal class ValidatableCommandSpecAnalysisResult : CommandSpecAnalysisResult
         ITypeSymbol param,
         ITypeSymbol result,
         ITypeSymbol validationResult,
-        SyntaxTrivia xmlComments,
+        string xmlComments,
         AttributeData? plasticCommandAttribute)
         : base(baseInterface, declaredInterface, implementedClass,
             executeMethod, param, result, plasticCommandAttribute, xmlComments)

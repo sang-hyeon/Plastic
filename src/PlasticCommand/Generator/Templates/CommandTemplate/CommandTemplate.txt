@@ -14,7 +14,7 @@ namespace {{ Namespace }}
 
     public interface TTFFGeneratedCommandInterface : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
     {
-        {{ Comment }}
+        /// <inheritdoc cref="{{XmlComment}}"/>
         Task<Generator.TTFFResult> ExecuteAsync(
             Generator.TTFFParameter TTFFParamName, CancellationToken token = default);
     }

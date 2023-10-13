@@ -15,7 +15,7 @@ namespace Templates // replace: to {{ Namespace }}
     // replace: internal to public
     internal interface TTFFGeneratedCommandInterface : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
     {
-        // add: {{ Comment }}
+        /// <inheritdoc cref="{{XmlComment}}"/>
         Task<Generator.TTFFResult> ExecuteAsync(
             Generator.TTFFParameter TTFFParamName, CancellationToken token = default);
     }

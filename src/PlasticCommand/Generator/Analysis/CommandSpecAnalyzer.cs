@@ -42,15 +42,18 @@ internal class CommandSpecAnalyzer
         INamedTypeSymbol declaredInterface =
             GetDeclaredInterface(implementedCommandSpec, rootCommandSpecInterface)!;
 
+        IMethodSymbol executeMethod
+            = GetImplementedExecuteMethod(declaredInterface, implementedCommandSpec);
+
         return new CommandSpecAnalysisResult(
                 rootCommandSpecInterface,
                 declaredInterface,
                 implementedCommandSpec,
-                (IMethodSymbol)implementedCommandSpec.GetMembers("ExecuteAsync")[0],
+                executeMethod,
                 declaredInterface.TypeArguments[0],
                 declaredInterface.TypeArguments[1],
                 FindAttribute(implementedCommandSpec),
-                GetXmlCommentsOfExecuteMethod(declaredInterface, implementedCommandSpec)
+                GetXmlCommentsIdOfExecuteMethod(executeMethod)
             );
     }
 
@@ -77,19 +80,23 @@ internal class CommandSpecAnalyzer
                     .FirstOrDefault(att => att.AttributeClass?.ToString() == attributeName);
     }
 
-    private SyntaxTrivia GetXmlCommentsOfExecuteMethod(
+    private IMethodSymbol GetImplementedExecuteMethod(
         INamedTypeSymbol declaredInterface, INamedTypeSymbol implementedCommandSpec)
     {
-        ISymbol executeMethodContract = declaredInterface.GetMembers().Single();
+        ISymbol executeMethodContract =
+            declaredInterface.GetMembers("ExecuteAsync").Any()
+            ? declaredInterface.GetMembers("ExecuteAsync")[0]
+            : declaredInterface.AllInterfaces.SelectMany(q => q.GetMembers("ExecuteAsync")).First();
+
         ISymbol executeMethodImpl =
             implementedCommandSpec.FindImplementationForInterfaceMember(executeMethodContract)!;
 
-        SyntaxTrivia xml = executeMethodImpl.DeclaringSyntaxReferences
-                                            .Single()
-                                            .GetSyntax()
-                                            .GetLeadingTrivia()
-                                            .FirstOrDefault(x => x.IsKind(SyntaxKind.SingleLineDocumentationCommentTrivia));
-        return xml;
+        return (IMethodSymbol)executeMethodImpl;
+    }
+
+    private string GetXmlCommentsIdOfExecuteMethod(IMethodSymbol implementedMethod)
+    {
+        return implementedMethod.GetDocumentationCommentId()!.Replace("M:", "");
     }
 
     private static INamedTypeSymbol? GetDeclaredInterface(

@@ -37,7 +37,6 @@ internal class ValidatableCommandGenerator
         string commandName = GenerateCommandName(analysis);
         string commandInterfaceName = "I" + commandName;
         string @namespace = analysis.ImplementedClass.ContainingNamespace.ToString();
-        string comment = analysis.XmlComments.Token.LeadingTrivia.ToString();
 
         var commandBuilder = new StringBuilder(template);
         commandBuilder.Replace("{{ Namespace }}", @namespace);
@@ -47,7 +46,6 @@ internal class ValidatableCommandGenerator
         commandBuilder.Replace("PlasticCommand.Generator.TTFFValidatableCommandSpec", analysis.ImplementedClass.ToString());
         commandBuilder.Replace("TTFFValidatableCommand", commandName);
         commandBuilder.Replace("{{ ServicesToBeProvided }}", codeForServicesToBeProvided);
-        commandBuilder.Replace("{{ Comment }}", comment);
         commandBuilder.Replace("TTFFGeneratedValidatableCommandInterface", commandInterfaceName);
         commandBuilder.Replace("TTFFParamName", analysis.ExecuteMethod.Parameters[0].Name);
         commandBuilder.Replace("TTFFCanExecuteParamName", analysis.CanExecuteMethod.Parameters[0].Name);

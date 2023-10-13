@@ -114,7 +114,7 @@ internal class CommandsGenerator
     private static string MakeMemberPropertyName(GeneratedCommandInfo command)
     {
         var name = command.GeneratedCommandInterfaceFullName.Split('.').Last();
-        name = name.TrimStart('I');
+        name = name.Substring(1);
         return name;
     }
 

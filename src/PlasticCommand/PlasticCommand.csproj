@@ -14,7 +14,7 @@
 
   <!-- metadata -->
   <PropertyGroup>
-    <Version>2.4.1</Version>
+    <Version>2.4.2</Version>
     <NeutralLanguage>en-US</NeutralLanguage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>SangHyeon.Kim</Authors>

@@ -98,15 +98,10 @@ internal class CommandGenerator
 
     protected string GenerateCommandName(CommandSpecAnalysisResult analysis)
     {
-        string attributeName = typeof(PlasticCommandAttribute).FullName;
+        (string? commandName, string? _)
+            = PlasticCommandAttributeAnalyzer.Analyze(analysis.ImplementedClass);
 
-        AttributeData? commandNameAtt;
-        commandNameAtt = analysis.ImplementedClass
-                                                .GetAttributes()
-                                                .FirstOrDefault(att => att.AttributeClass?.ToString() == attributeName);
-
-        if (commandNameAtt?.ConstructorArguments.FirstOrDefault().Value
-                is string commandName)
+        if (commandName is not null)
         {
             return commandName;
         }

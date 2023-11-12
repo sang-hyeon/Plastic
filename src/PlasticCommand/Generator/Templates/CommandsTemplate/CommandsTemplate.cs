@@ -1,8 +1,9 @@
 ﻿#pragma warning disable
 #nullable enable
-namespace TTFFNamespace
+namespace PlasticCommand.Generated.Group
 {
-    public class TTFFCommands
+    // replace: internal to public
+    internal class TTFFCommands
     {
         // {{Members}}
 

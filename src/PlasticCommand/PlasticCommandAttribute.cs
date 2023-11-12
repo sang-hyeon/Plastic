@@ -5,10 +5,7 @@ namespace PlasticCommand;
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
 public sealed class PlasticCommandAttribute : Attribute
 {
-    public string GeneratedCommandName { get; }
+    public string? GeneratedCommandName { get; set; }
 
-    public PlasticCommandAttribute(string generatedCommandName)
-    {
-        this.GeneratedCommandName = generatedCommandName;
-    }
+    public string? GroupName { get; set; }
 }

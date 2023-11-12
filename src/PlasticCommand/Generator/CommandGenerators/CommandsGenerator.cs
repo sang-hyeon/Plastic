@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using PlasticCommand.Generator.Analysis;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,16 +22,15 @@ internal class CommandsGenerator
     public HashSet<string> Generate(IEnumerable<GeneratedCommandInfo> generatedCommands)
     {
         HashSet<string> generatedCommandGroups = new();
-        IEnumerable<IGrouping<INamespaceSymbol, GeneratedCommandInfo>> commandGroups;
-        commandGroups = GroupCommandByNamespace(generatedCommands);
+        IEnumerable<IGrouping<string, GeneratedCommandInfo>> commandGroups;
+        commandGroups = GroupCommandByAttribute(generatedCommands);
 
-        foreach (IGrouping<INamespaceSymbol, GeneratedCommandInfo> group in commandGroups)
+        foreach (IGrouping<string, GeneratedCommandInfo> group in commandGroups)
         {
             string template = Helper.ReadEmbeddedResourceAsString(TEMPLATE_NAME);
             var builder = new StringBuilder(template);
 
-            builder.Replace("TTFFNamespace", group.Key.ToDisplayString());
-            builder.Replace("TTFFCommands", group.Key.Name + "Commands");
+            builder.Replace("TTFFCommands", group.Key);
 
             string memberCode = MakeMemberPropertyCode(group);
             builder.Replace("{{Members}}", memberCode);
@@ -42,14 +42,14 @@ internal class CommandsGenerator
             string functionCode = MakeFunctionCode(group);
             builder.Replace("{{Methods}}", functionCode);
 
-            this._context.AddSource($"{group.Key.ToDisplayString()}.cs", builder.ToString());
-            generatedCommandGroups.Add($"{group.Key.ToDisplayString()}.{group.Key.Name}Commands");
+            this._context.AddSource($"PlasticCommand.Generated.Group.{group.Key}.cs", builder.ToString());
+            generatedCommandGroups.Add($"PlasticCommand.Generated.Group.{group.Key}");
         }
 
         return generatedCommandGroups;
     }
 
-    private string MakeFunctionCode(IGrouping<INamespaceSymbol, GeneratedCommandInfo> group)
+    private string MakeFunctionCode(IGrouping<string, GeneratedCommandInfo> group)
     {
         var builder = new StringBuilder();
         foreach (GeneratedCommandInfo command in group)
@@ -71,8 +71,7 @@ internal class CommandsGenerator
         return builder.ToString();
     }
 
-    private (string args, string init) MakeConstructorCode(
-        IGrouping<INamespaceSymbol, GeneratedCommandInfo> group)
+    private (string args, string init) MakeConstructorCode(IGrouping<string, GeneratedCommandInfo> group)
     {
         List<(string argName, GeneratedCommandInfo info)> argsInfo = new();
         var builder = new StringBuilder();
@@ -99,8 +98,7 @@ internal class CommandsGenerator
         return (builder.ToString(), initBuilder.ToString());
     }
 
-    private string MakeMemberPropertyCode(
-        IGrouping<INamespaceSymbol, GeneratedCommandInfo> group)
+    private string MakeMemberPropertyCode(IGrouping<string, GeneratedCommandInfo> group)
     {
         var builder = new StringBuilder();
         foreach (GeneratedCommandInfo command in group)
@@ -119,14 +117,18 @@ internal class CommandsGenerator
         return name;
     }
 
-    private IEnumerable<IGrouping<INamespaceSymbol, GeneratedCommandInfo>> GroupCommandByNamespace(
+    private IEnumerable<IGrouping<string, GeneratedCommandInfo>> GroupCommandByAttribute(
         IEnumerable<GeneratedCommandInfo> generatedCommands)
     {
-        IEnumerable<IGrouping<INamespaceSymbol, GeneratedCommandInfo>> grouped;
-
-        grouped = generatedCommands
-                            .GroupBy(q => q.AnalysisResult.ImplementedClass.ContainingNamespace);
-
-        return grouped;
+        return generatedCommands
+                            .Select(commandInfo =>
+                            {
+                                INamedTypeSymbol commandSpecClass = commandInfo.AnalysisResult.ImplementedClass;
+                                (string? _, string? groupName) = PlasticCommandAttributeAnalyzer.Analyze(commandSpecClass);
+                                return (groupName, commandInfo);
+                            })
+                            .Where(q => q.groupName is not null)
+                            .Select(q => (q.groupName!, q.commandInfo))
+                            .GroupBy(q => q.Item1, q => q.commandInfo);
     }
 }

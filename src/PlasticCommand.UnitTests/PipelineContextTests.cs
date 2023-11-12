@@ -1,5 +1,4 @@
-﻿
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using PlasticCommand.UnitTests.TestCommands;
 using PlasticCommand.UnitTests.TestCommands.Helpers;

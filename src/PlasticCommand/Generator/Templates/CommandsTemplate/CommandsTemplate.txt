@@ -1,6 +1,6 @@
 ﻿#pragma warning disable
 #nullable enable
-namespace TTFFNamespace
+namespace PlasticCommand.Generated.Group
 {
     public class TTFFCommands
     {

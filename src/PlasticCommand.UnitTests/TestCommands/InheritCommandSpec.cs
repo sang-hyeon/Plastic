@@ -14,6 +14,7 @@ public abstract class InheritCommandSpecBase : ICommandSpecification<int, int>
     protected abstract Task<int> Execute();
 }
 
+[PlasticCommand(GroupName = "AGroupCommands")]
 public class InheritCommandSpec : InheritCommandSpecBase
 {
     /// <summary>

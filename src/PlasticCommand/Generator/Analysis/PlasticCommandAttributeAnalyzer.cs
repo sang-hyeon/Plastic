@@ -1,4 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 
 namespace PlasticCommand.Generator.Analysis;
@@ -17,10 +19,11 @@ internal static class PlasticCommandAttributeAnalyzer
 
         string commandNameArg = nameof(PlasticCommandAttribute.GeneratedCommandName);
         string groupNameArg = nameof(PlasticCommandAttribute.GroupName);
+        ImmutableArray<KeyValuePair<string, TypedConstant>>? attributeArgs = commandNameAtt?.NamedArguments;
 
         return (
-            (string?)commandNameAtt?.NamedArguments.Single(q => q.Key == commandNameArg).Value.Value,
-            (string?)commandNameAtt?.NamedArguments.Single(q => q.Key == groupNameArg).Value.Value
+            (string?)attributeArgs?.SingleOrDefault(q => q.Key == commandNameArg).Value.Value,
+            (string?)attributeArgs?.SingleOrDefault(q => q.Key == groupNameArg).Value.Value
             );
     }
 }

@@ -13,14 +13,16 @@ namespace Templates // replace: to {{ Namespace }}
     using TargetCommandSpec = PlasticCommand.Generator.TTFFCommandSpec;
 
     // replace: internal to public
+    [GeneratedByPlasticCommand]
     internal interface TTFFGeneratedCommandInterface : ICommandSpecification<Generator.TTFFParameter, Generator.TTFFResult>
     {
         /// <inheritdoc cref="{{XmlComment}}"/>
         Task<Generator.TTFFResult> ExecuteAsync(
             Generator.TTFFParameter TTFFParamName, CancellationToken token = default);
     }
-    
+
     // replace: internal to public
+    [GeneratedByPlasticCommand]
     internal class TTFFCommand : TTFFGeneratedCommandInterface
     {
         private readonly IServiceProvider _provider;

@@ -3,6 +3,7 @@
 namespace PlasticCommand.Generated.Group
 {
     // replace: internal to public
+    [GeneratedByPlasticCommand]
     internal class TTFFCommands
     {
         // {{Members}}

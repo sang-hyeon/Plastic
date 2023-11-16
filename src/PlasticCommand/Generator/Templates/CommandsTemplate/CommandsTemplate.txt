@@ -2,6 +2,7 @@
 #nullable enable
 namespace PlasticCommand.Generated.Group
 {
+    [GeneratedByPlasticCommand]
     public class TTFFCommands
     {
 {{Members}}

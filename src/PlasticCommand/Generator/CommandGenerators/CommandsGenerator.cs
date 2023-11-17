@@ -24,11 +24,11 @@ internal class CommandsGenerator
         HashSet<string> generatedCommandGroups = new();
         IEnumerable<IGrouping<string, GeneratedCommandInfo>> commandGroups;
         commandGroups = GroupCommandByAttribute(generatedCommands);
+        string template = Helper.ReadEmbeddedResourceAsString(TEMPLATE_NAME);
 
         foreach (IGrouping<string, GeneratedCommandInfo> group in commandGroups)
         {
-            string template = Helper.ReadEmbeddedResourceAsString(TEMPLATE_NAME);
-            var builder = new StringBuilder(template);
+            var builder = new StringBuilder(template.ToString());
 
             builder.Replace("TTFFCommands", group.Key);
 
@@ -83,7 +83,8 @@ internal class CommandsGenerator
                 builder.Append(", ");
 
             var name = command.GeneratedCommandInterfaceFullName.Split('.').Last();
-            name = name.TrimStart('I').ToLower();
+            name = char.ToLower(name[1]) + name.Substring(2);
+
             builder.Append($"{command.GeneratedCommandInterfaceFullName} {name}");
             argsInfo.Add((name, command));
         }
